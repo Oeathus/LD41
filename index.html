@@ -1,146 +1,299 @@
-<html lang="en"> 
-<head> 
-	<meta charset="UTF-8" />
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
     <title>Phaser - Making your first game, part 8</title>
     <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+    <script src="//d3js.org/d3.v5.min.js"></script>
     <style type="text/css">
         body {
             margin: 0;
         }
     </style>
 </head>
+
 <body>
+    <button onclick="bored--">Pet</button>
+    <button onclick="catnip += 1">Buy catnip</button>
+    <button onclick="cigs += 1">Buy cigs</button>
+    <button onclick="wine += 1">Buy Wine</button>
+    <button onclick="tuna += 1">Buy tuna</button>
 
-<script type="text/javascript">
+    <div>
+        <h2 style="display: inline-block;">Dealers Card:</h2>
+        <h3 id="dealersCard" style="display: inline-block;"></h3>
+    </div>
+    <div>
+        <h2 style="display: inline-block;">Your first card:</h2>
+        <h3 id="yourCard1" style="display: inline-block;"></h3>
+    </div>
+    <div>
+        <h2 style="display: inline-block;">Your second Card:</h2>
+        <h3 id="yourCard2" style="display: inline-block;"></h3>
+    </div>
+    <div>
+        <h2 style="display: inline-block;">Bonus Card:</h2>
+        <h3 id="bonusCard" style="display: inline-block;"></h3>
+    </div>
+    <p id="wallet"></p>
+    <button id="bet">Bet</button>
+    <button id="skip">Skip</button>
+    <button id="next" style="display: none;">Next Hand</button>
+    <script type="text/javascript">
+        const SUITS = ['Spades', 'Clubs', 'Hearts', 'Diamonds'];
+        const NAMES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
 
-var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, render: render });
+        function DOMLink(elem) {
+            this.elem = elem;
+            this.val = null;
+            this.update = function (val = null) {
+                if (val !== null) {
+                    this.val = val;
+                }
+                if (this.val === null && typeof this.val === "object") {
+                    this.elem.innerText = "";
+                } else {
+                    this.elem.innerText = this.val.toString();
+                }
+            };
+            this.empty = function () {
+                this.val = null;
+                this.elem.innerText = "";
+            };
+        }
 
-function preload() {
+        function Card(value, name, suit) {
+            this.value = value;
+            this.name = name;
+            this.suit = suit;
+            this.toString = function () {
+                return this.name + " of " + this.suit;
+            };
+            this.compare = function (otherCard = null) {
+                if (otherCard !== null) {
+                    if (this.value > otherCard.value) {
+                        return 1;
+                    } else if (this.value < otherCard.value) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    return null;
+                }
+            }
+        }
 
-    game.load.image('ball', 'assets/sprites/pangball.png');
+        function Wallet(elem, startingAmount = 20.00) {
+            this.elem = elem;
+            this.value = startingAmount;
+            this.update = function (val = NaN) {
+                if (!isNaN(val)) {
+                    this.value += val;
+                }
+                this.elem.innerText = "$" + this.value.toFixed(2).toString();
+            }
+        }
 
-}
+        var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'prison-cats', { preload: preload, create: create, render: render });
 
-var catnip = 0;
-var cigs = 0;
-var wine = 0;
-var tuna = 0;
+        let dealersCard = new DOMLink(document.getElementById("dealersCard"));
+        let yourCard1 = new DOMLink(document.getElementById("yourCard1"));
+        let yourCard2 = new DOMLink(document.getElementById("yourCard2"));
+        let bonusCard = new DOMLink(document.getElementById("bonusCard"));
+        let wallet = new Wallet(document.getElementById("wallet"));
+        let bet = document.getElementById("bet");
+        let skip = document.getElementById("skip");
+        let next = document.getElementById("next");
+        let deck;
 
-var nicfit = 0;
-var sober = 0;
-var hungry = 0;
-var bored = 0;
+        function preload() {
+            //game.load.image('ball', 'assets/sprites/pangball.png');
+        }
 
-function create() {
+        var catnip = 0;
+        var cigs = 0;
+        var wine = 0;
+        var tuna = 0;
 
-    game.stage.backgroundColor = '#ffffff';
+        var nicfit = 0;
+        var sober = 0;
+        var hungry = 0;
+        var bored = 0;
 
+        function create() {
+            game.stage.backgroundColor = '#ffffff';
 
-    catnipL = game.add.text(20, 20, 'catnip: ' + catnip.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
-    cigsL = game.add.text(20, 40, 'cigs: ' + cigs.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
-    wineL = game.add.text(20, 60, 'wine: ' + wine.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
-    tunaL = game.add.text(20, 80, 'tuna: ' + tuna.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+            catnipL = game.add.text(20, 20, 'catnip: ' + catnip.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+            cigsL = game.add.text(20, 40, 'cigs: ' + cigs.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+            wineL = game.add.text(20, 60, 'wine: ' + wine.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+            tunaL = game.add.text(20, 80, 'tuna: ' + tuna.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
 
-    nicfitL = game.add.text(20, 120, 'nicfit: ' + nicfit.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
-    soberL = game.add.text(20, 140, 'sober: ' + sober.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
-    hungryL = game.add.text(20, 160, 'hungry: ' + hungry.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
-    boredL = game.add.text(20, 180, 'bored: ' + bored.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+            nicfitL = game.add.text(20, 120, 'nicfit: ' + nicfit.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+            soberL = game.add.text(20, 140, 'sober: ' + sober.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+            hungryL = game.add.text(20, 160, 'hungry: ' + hungry.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+            boredL = game.add.text(20, 180, 'bored: ' + bored.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
 
-    //  Here we'll create a basic looped event.
-    //  A looped event is like a repeat event but with no limit, it will literally repeat itself forever, or until you stop it.
+            //  Here we'll create a basic looped event.
+            //  A looped event is like a repeat event but with no limit, it will literally repeat itself forever, or until you stop it.
 
-    //  The first parameter is how long to wait before the event fires. In this case 1 second (you could pass in 1000 as the value as well.)
-    //  The next two parameters are the function to call ('updateCounter') and the context under which that will happen.
+            //  The first parameter is how long to wait before the event fires. In this case 1 second (you could pass in 1000 as the value as well.)
+            //  The next two parameters are the function to call ('updateCounter') and the context under which that will happen.
 
-    game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
+            game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
+        }
 
-}
-
-function updateCounter() {
-
-    bored += .10;
-
-    
-    if(catnip>0){
-        catnip -= .01;
-
-        bored -= .06;
-        hungry +=.06;
-        sober -=.06;
-
-    } else {
-        catnip = 0;
-    }
-
-    if(cigs > 0){
-        cigs -= .01
-
-        hungry -= .03;
-        nicfit -=.12;
-        sober +=.04;
-    } else {
-        cigs = 0;
-    }
-
-    if(wine > 0){
-        wine -= .01
-
-        bored -=.06;
-        nicfit+=.03;
-        sober -= .06;
-
-    } else {
-        wine = 0;
-    }
-
-    if(tuna > 0){
-        tuna -= .01;
-
-        hungry -= .06;
-        sober += .04;
-
-    } else{
-        tuna = 0;
-    }
-
-    if(nicfit < 0){
-        nicfit = 0;
-    }
-    if(sober < 0){
-        sober = 0;
-    }
-    if(hungry < 0){
-        hungry = 0;
-    }
-    if(bored < 0){
-        bored = 0;
-    }
-
-
-    catnipL.setText('catnip: ' + (catnip*3.5).toFixed(2));
-    cigsL.setText('cigs: ' + (cigs*20).toFixed(2));
-    wineL.setText('wine: ' + (wine*750).toFixed(2));
-    tunaL.setText('tuna: ' + (tuna*12).toFixed(2));
-
-    nicfitL.setText('nicfit: ' + nicfit.toFixed(2));
-    soberL.setText('sober: ' + sober.toFixed(2));
-    hungryL.setText('hungry: ' + hungry.toFixed(2));
-    boredL.setText('bored: ' + bored.toFixed(2));
+        function updateCounter() {
+            bored += .10;
 
 
+            if (catnip > 0) {
+                catnip -= .01;
 
-}
+                bored -= .06;
+                hungry += .06;
+                sober -= .06;
 
-function render() {
+            } else {
+                catnip = 0;
+            }
 
+            if (cigs > 0) {
+                cigs -= .01
 
-}
+                hungry -= .03;
+                nicfit -= .12;
+                sober += .04;
+            } else {
+                cigs = 0;
+            }
 
-</script>
- <button onclick="bored--">Pet</button> 
- <button onclick="catnip += 1">Buy catnip</button> 
- <button onclick="cigs += 1">Buy cigs</button> 
- <button onclick="wine += 1">Buy Wine</button> 
- <button onclick="tuna += 1">Buy tuna</button> 
+            if (wine > 0) {
+                wine -= .01
+
+                bored -= .06;
+                nicfit += .03;
+                sober -= .06;
+
+            } else {
+                wine = 0;
+            }
+
+            if (tuna > 0) {
+                tuna -= .01;
+
+                hungry -= .06;
+                sober += .04;
+
+            } else {
+                tuna = 0;
+            }
+
+            if (nicfit < 0) {
+                nicfit = 0;
+            }
+            if (sober < 0) {
+                sober = 0;
+            }
+            if (hungry < 0) {
+                hungry = 0;
+            }
+            if (bored < 0) {
+                bored = 0;
+            }
+
+            catnipL.setText('catnip: ' + (catnip * 3.5).toFixed(2));
+            cigsL.setText('cigs: ' + (cigs * 20).toFixed(2));
+            wineL.setText('wine: ' + (wine * 750).toFixed(2));
+            tunaL.setText('tuna: ' + (tuna * 12).toFixed(2));
+
+            nicfitL.setText('nicfit: ' + nicfit.toFixed(2));
+            soberL.setText('sober: ' + sober.toFixed(2));
+            hungryL.setText('hungry: ' + hungry.toFixed(2));
+            boredL.setText('bored: ' + bored.toFixed(2));
+        }
+
+        function render() {
+        }
+
+        function getDeck() {
+            let cards = [];
+
+            for (let suit = 0; suit < 4; ++suit) {
+                for (let name = 0; name < 13; ++name) {
+                    cards.push(new Card(name + 1, NAMES[name], SUITS[suit]));
+                }
+            }
+
+            return cards;
+        }
+
+        function checkDeckSize() {
+            if (deck.length < 4) {
+                let tmpDeck = getDeck();
+                d3.shuffle(tmpDeck);
+                deck.concat(tmpDeck);
+            }
+        }
+
+        function initialize() {
+            deck = getDeck();
+            d3.shuffle(deck);
+            dealersCard.update(deck.pop());
+            yourCard1.update(deck.pop());
+            wallet.update();
+        }
+
+        function endHand() {
+            bet.style.display = "none";
+            skip.style.display = "none";
+            next.style.display = "inline-block";
+        }
+
+        initialize();
+
+        bet.addEventListener('click', function (e) {
+            let amount = NaN;
+
+            while (isNaN(amount) || amount < 0.01 || amount > wallet.value) {
+                amount = parseFloat(prompt("Bet amount:", wallet.value.toString()));
+            }
+
+            checkDeckSize();
+
+            yourCard2.update(deck.pop());
+            if ((yourCard2.val.compare(dealersCard.val) == 1 && yourCard2.val.compare(yourCard1.val) == -1) ||
+                (yourCard2.val.compare(dealersCard.val) == -1 && yourCard2.val.compare(yourCard1.val) == 1)) {
+                bonusCard.update(deck.pop());
+                if ((bonusCard.val.compare(dealersCard.val) == 1 && bonusCard.val.compare(yourCard1.val) == -1) ||
+                    (bonusCard.val.compare(dealersCard.val) == -1 && bonusCard.val.compare(yourCard1.val) == 1)) {
+                    wallet.update(amount * 2);
+                } else {
+                    wallet.update(amount);
+                }
+            } else {
+                wallet.update(-1 * amount);
+            }
+
+            endHand();
+        });
+
+        skip.addEventListener('click', function (e) {
+            checkDeckSize();
+            yourCard2.update(deck.pop());
+            endHand();
+        });
+
+        next.addEventListener('click', function (e) {
+            dealersCard.update(deck.pop());
+            yourCard1.update(deck.pop());
+            yourCard2.empty();
+            bonusCard.empty();
+            bet.style.display = "inline-block";
+            skip.style.display = "inline-block";
+            next.style.display = "none";
+        });
+    </script>
 </body>
+
 </html>
