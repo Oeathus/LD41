@@ -1,0 +1,146 @@
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8" />
+    <title>Phaser - Making your first game, part 8</title>
+    <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script type="text/javascript">
+
+var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, render: render });
+
+function preload() {
+
+    game.load.image('ball', 'assets/sprites/pangball.png');
+
+}
+
+var catnip = 0;
+var cigs = 0;
+var wine = 0;
+var tuna = 0;
+
+var nicfit = 0;
+var sober = 0;
+var hungry = 0;
+var bored = 0;
+
+function create() {
+
+    game.stage.backgroundColor = '#ffffff';
+
+
+    catnipL = game.add.text(20, 20, 'catnip: ' + catnip.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+    cigsL = game.add.text(20, 40, 'cigs: ' + cigs.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+    wineL = game.add.text(20, 60, 'wine: ' + wine.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+    tunaL = game.add.text(20, 80, 'tuna: ' + tuna.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+
+    nicfitL = game.add.text(20, 120, 'nicfit: ' + nicfit.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+    soberL = game.add.text(20, 140, 'sober: ' + sober.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+    hungryL = game.add.text(20, 160, 'hungry: ' + hungry.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+    boredL = game.add.text(20, 180, 'bored: ' + bored.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+
+    //  Here we'll create a basic looped event.
+    //  A looped event is like a repeat event but with no limit, it will literally repeat itself forever, or until you stop it.
+
+    //  The first parameter is how long to wait before the event fires. In this case 1 second (you could pass in 1000 as the value as well.)
+    //  The next two parameters are the function to call ('updateCounter') and the context under which that will happen.
+
+    game.time.events.loop(Phaser.Timer.SECOND, updateCounter, this);
+
+}
+
+function updateCounter() {
+
+    bored += .10;
+
+    
+    if(catnip>0){
+        catnip -= .01;
+
+        bored -= .06;
+        hungry +=.06;
+        sober -=.06;
+
+    } else {
+        catnip = 0;
+    }
+
+    if(cigs > 0){
+        cigs -= .01
+
+        hungry -= .03;
+        nicfit -=.12;
+        sober +=.04;
+    } else {
+        cigs = 0;
+    }
+
+    if(wine > 0){
+        wine -= .01
+
+        bored -=.06;
+        nicfit+=.03;
+        sober -= .06;
+
+    } else {
+        wine = 0;
+    }
+
+    if(tuna > 0){
+        tuna -= .01;
+
+        hungry -= .06;
+        sober += .04;
+
+    } else{
+        tuna = 0;
+    }
+
+    if(nicfit < 0){
+        nicfit = 0;
+    }
+    if(sober < 0){
+        sober = 0;
+    }
+    if(hungry < 0){
+        hungry = 0;
+    }
+    if(bored < 0){
+        bored = 0;
+    }
+
+
+    catnipL.setText('catnip: ' + (catnip*3.5).toFixed(2));
+    cigsL.setText('cigs: ' + (cigs*20).toFixed(2));
+    wineL.setText('wine: ' + (wine*750).toFixed(2));
+    tunaL.setText('tuna: ' + (tuna*12).toFixed(2));
+
+    nicfitL.setText('nicfit: ' + nicfit.toFixed(2));
+    soberL.setText('sober: ' + sober.toFixed(2));
+    hungryL.setText('hungry: ' + hungry.toFixed(2));
+    boredL.setText('bored: ' + bored.toFixed(2));
+
+
+
+}
+
+function render() {
+
+
+}
+
+</script>
+ <button onclick="bored--">Pet</button> 
+ <button onclick="catnip += 1">Buy catnip</button> 
+ <button onclick="cigs += 1">Buy cigs</button> 
+ <button onclick="wine += 1">Buy Wine</button> 
+ <button onclick="tuna += 1">Buy tuna</button> 
+</body>
+</html>
