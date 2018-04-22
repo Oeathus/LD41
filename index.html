@@ -68,9 +68,7 @@
                 if (!isNaN(val)) {
                     this.value += val;
                 }
-                if (this.elem === null && typeof this.elem === "object") {
-
-                } else {
+                if (!(this.elem === null && typeof this.elem === "object")) {
                     this.elem.setText(this.toString());
                 }
             };
@@ -80,6 +78,7 @@
         
         
         let deck;
+        let discardPile = [];
         let dealersCard = new DOMLink();
         let yourCard1 = new DOMLink();
         let yourCard2 = new DOMLink();
@@ -105,10 +104,10 @@
         var catattack = 0;
 
         function preload() {
-            game.load.image('background', 'assets/images/ruffhud1.png');
+            game.load.image('background', 'assets/images/cellmockup2.png');
             game.load.image('pcat_neutral', 'assets/images/tempcat.png');
             game.load.image('betButton', 'assets/images/betButton.png');
-            game.load.image('nextButton', 'assets/images/nextButton.png');
+            game.load.image('nextButton', 'assets/images/carddeck.png');
 
             game.load.image('eyel', 'assets/images/eyel.png');
             game.load.image('eyer', 'assets/images/eyer.png');
@@ -121,7 +120,7 @@
             game.stage.backgroundColor = '#ffffff';
             background = game.add.tileSprite(0, 0, 800, 600, 'background');
 
-            catnipL = game.add.bitmapText(20, 20, 'child', 'catnip: ' + catnip.toFixed(2), 24);
+            catnipL = game.add.bitmapText(20, 20, 'child', 'Catnip: ' + catnip.toFixed(2), 24);
             cigsL = game.add.text(20, 40, 'cigs: ' + cigs.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
             wineL = game.add.text(20, 60, 'wine: ' + wine.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
             tunaL = game.add.text(20, 80, 'tuna: ' + tuna.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
@@ -343,9 +342,9 @@
 
         function checkDeckSize() {
             if (deck.length < 4) {
-                let tmpDeck = getDeck();
-                d3.shuffle(tmpDeck);
-                deck = deck.concat(tmpDeck);
+                d3.shuffle(discardPile);
+                deck = deck.concat(discardPile);
+                discardPile.empty();
             }
         }
 
@@ -387,6 +386,12 @@
                 yourCard2.update(deck.pop());
                 endHand();
             } else {
+                discardPile.push(dealersCard.val);
+                discardPile.push(yourCard1.val);
+                discardPile.push(yourCard2.val);
+                if (!(bonusCard.val === null && typeof bonusCard.val === "object")) {
+                    discardPile.push(bonusCard.val);
+                }
                 dealersCard.update(deck.pop());
                 yourCard1.update(deck.pop());
                 yourCard2.empty();
