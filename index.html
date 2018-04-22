@@ -240,15 +240,6 @@
                 bored = 0;
             }
 
-<<<<<<< HEAD
-            catattack += (nicfit+sober+hungry+bored - 1)*2;
-
-            if(catattack < 0 ){
-                catattack = 0;
-            }
-
-            if(catattack > 1){
-=======
             catattack += (nicfit + sober + hungry + bored - 1) * 2;
 
             if (catattack < 0) {
@@ -256,7 +247,6 @@
             }
 
             if (catattack > 1) {
->>>>>>> buttons-to-phaser
                 catattack = 0;
                 bored = 0;
                 alert('catATTACK');
@@ -278,43 +268,6 @@
         function render() {
         }
 
-<<<<<<< HEAD
-        function buycatnip(){
-    if(wallet.value>catnipprice){
-        wallet.value -= catnipprice;
-        wallet.update();
-        catnipprice*=1.4;
-        catnip++;
-    }
-}
-
-function buycigs(){
-    if(wallet.value>cigsprice){
-        wallet.value -= cigsprice;
-        wallet.update();
-        cigsprice*=1.05;
-        cigs++;
-    }
-}
-
-function buywine(){
-    if(wallet.value>wineprice){
-        wallet.value -= wineprice;
-        wallet.update();
-        wineprice*=1.7;
-        wine++;
-    }
-}
-
-function buytuna(){
-    if(wallet.value>tunaprice){
-        wallet.value -= tunaprice;
-        wallet.update();
-        tunaprice*=1.2;
-        tuna++;
-    }
-}
-=======
         function buycatnip() {
             if (wallet.value > catnipprice) {
                 wallet.value -= catnipprice;
@@ -350,7 +303,6 @@ function buytuna(){
                 tuna++;
             }
         }
->>>>>>> buttons-to-phaser
 
         function getDeck() {
             let cards = [];
