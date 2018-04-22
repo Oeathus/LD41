@@ -89,11 +89,6 @@
         var cigs = 0;
         var wine = 0;
         var tuna = 0;
-        
-        var catnipprice = 40;
-        var cigsprice = 10;
-        var wineprice = 5;
-        var tunaprice = 1.5;
 
         var catnipprice = 40;
         var cigsprice = 10;
@@ -331,7 +326,7 @@
             if (deck.length < 4) {
                 let tmpDeck = getDeck();
                 d3.shuffle(tmpDeck);
-                deck.concat(tmpDeck);
+                deck = deck.concat(tmpDeck);
             }
         }
 
@@ -368,8 +363,8 @@
         }
 
         function nextButtonAction() {
+            checkDeckSize();
             if (betButton.inputEnabled) {
-                checkDeckSize();
                 yourCard2.update(deck.pop());
                 endHand();
             } else {
