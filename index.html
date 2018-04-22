@@ -75,8 +75,8 @@
         }
 
         var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'prison-cats', { preload: preload, create: create, render: render });
-        
-        
+
+
         let deck;
         let discardPile = [];
         let dealersCard = new DOMLink();
@@ -111,7 +111,7 @@
 
             game.load.image('eyel', 'assets/images/eyel.png');
             game.load.image('eyer', 'assets/images/eyer.png');
-            
+
             game.load.bitmapFont('child', 'assets/images/ashcan.png', 'assets/images/ashcan.fnt');
         }
 
@@ -200,7 +200,7 @@
             //  The first parameter is how long to wait before the event fires. In this case 1 second (you could pass in 1000 as the value as well.)
             //  The next two parameters are the function to call ('updateCounter') and the context under which that will happen.
 
-            game.time.events.loop(Phaser.Timer.SECOND*5, updateCounter, this);
+            game.time.events.loop(Phaser.Timer.SECOND * 5, updateCounter, this);
         }
 
         function updateCounter() {
@@ -278,7 +278,7 @@
                 bored = 1;
             }
 
-            catattack = (4 - (nicfit + sober + hungry + bored))/4;
+            catattack = (4 - (nicfit + sober + hungry + bored)) / 4;
 
 
 
@@ -296,7 +296,7 @@
         }
 
         function render() {
-            righteye.rotation = game.physics.arcade.angleToPointer(righteye)-.6;
+            righteye.rotation = game.physics.arcade.angleToPointer(righteye) - .6;
             lefteye.rotation = game.physics.arcade.angleToPointer(lefteye);
         }
 
@@ -362,7 +362,11 @@
         }
 
         function betButtonAction() {
-            betAmount = betAmount >= 3 ? 1 : betAmount + 1;
+            if (betAmount == wallet.value) {
+                betAmount = 1;
+            } else {
+                betAmount = betAmount >= 3 ? 1 : betAmount + 1;
+            }
             if (betAmount > wallet.value) {
                 betAmount = wallet.value;
             }
@@ -399,15 +403,26 @@
                 discardPile.push(yourCard2.val);
                 if (!(bonusCard.val === null && typeof bonusCard.val === "object")) {
                     discardPile.push(bonusCard.val);
+                    bonusCard.empty();
                 }
-                dealersCard.update(deck.pop());
-                yourCard1.update(deck.pop());
                 yourCard2.empty();
                 yourCard2.elem.setText("Draw");
-                bonusCard.empty();
 
-                betButton.inputEnabled = true;
-                yourCard2.elem.inputEnabled = true;
+                if (wallet.value > 0) {
+                    if (betAmount > wallet.value) {
+                        betAmount = wallet.value;
+                        betL.setText("Bet: $" + betAmount.toFixed(2).toString());
+                    }
+                    dealersCard.update(deck.pop());
+                    yourCard1.update(deck.pop());
+
+                    betButton.inputEnabled = true;
+                    yourCard2.elem.inputEnabled = true;
+                } else {
+                    yourCard1.empty();
+                    dealersCard.empty();
+                    dealersCard.elem.setText("You have no money!");
+                }
             }
         }
     </script>
