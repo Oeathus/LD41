@@ -97,10 +97,10 @@
         var wineprice = 5;
         var tunaprice = 1.5;
 
-        var nicfit = 0;
-        var sober = 0;
-        var hungry = 0;
-        var bored = 0;
+        var nicfit = 1;
+        var sober = 1;
+        var hungry = 1;
+        var bored = 1;
 
         var catattack = 0;
 
@@ -205,46 +205,49 @@
         }
 
         function updateCounter() {
-            bored += .10;
+            bored += .01;
+            sober += .01;
+            hungry += .01;
+            nicfit += .01;
 
 
             if (catnip > 0) {
                 catnip -= .01;
 
-                bored -= .06;
-                hungry += .06;
-                sober -= .06;
+                bored -= .03;
+                hungry += .01;
+                sober -= .03;
 
             } else {
                 catnip = 0;
             }
 
             if (cigs > 0) {
-                cigs -= .05
+                cigs -= .01
 
-                hungry -= .03;
-                nicfit -= .12;
-                sober += .04;
+                hungry -= .01;
+                nicfit -= .05;
+                sober += .01;
             } else {
                 cigs = 0;
             }
 
             if (wine > 0) {
-                wine -= .02
+                wine -= .01
 
-                bored -= .06;
-                nicfit += .03;
-                sober -= .06;
+                bored -= .03;
+                nicfit += .01;
+                sober -= .03;
 
             } else {
                 wine = 0;
             }
 
             if (tuna > 0) {
-                tuna -= .13;
+                tuna -= .01;
 
                 hungry -= .06;
-                sober += .04;
+                sober += .01;
 
             } else {
                 tuna = 0;
@@ -263,17 +266,22 @@
                 bored = 0;
             }
 
-            catattack += (nicfit + sober + hungry + bored - 1) * 2;
-
-            if (catattack < 0) {
-                catattack = 0;
+            if (nicfit > 1) {
+                nicfit = 1;
+            }
+            if (sober > 1) {
+                sober = 1;
+            }
+            if (hungry > 1) {
+                hungry = 1;
+            }
+            if (bored > 1) {
+                bored = 1;
             }
 
-            if (catattack > 1) {
-                catattack = 0;
-                bored = 0;
-                alert('catATTACK');
-            }
+            catattack = (4 - (nicfit + sober + hungry + bored))/4;
+
+
 
             catnipL.setText('Catnip: ' + (catnip * 3.5).toFixed(2));
             cigsL.setText('cigs: ' + (cigs * 20).toFixed(2));
@@ -285,7 +293,7 @@
             hungryL.setText('hungry: ' + hungry.toFixed(2));
             boredL.setText('bored: ' + bored.toFixed(2));
 
-            catattackL.setText('catattack: ' + catattack.toFixed(2));
+            catattackL.setText('bonus: ' + catattack.toFixed(2));
         }
 
         function render() {
