@@ -108,7 +108,7 @@
         let deck;
 
         function preload() {
-            //game.load.image('ball', 'assets/sprites/pangball.png');
+            game.load.image('background', 'assets/images/ruffhud.png');
         }
 
         var catnip = 0;
@@ -123,6 +123,7 @@
 
         function create() {
             game.stage.backgroundColor = '#ffffff';
+            background = game.add.tileSprite(0, 0, 800, 600, 'background');
 
             catnipL = game.add.text(20, 20, 'catnip: ' + catnip.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
             cigsL = game.add.text(20, 40, 'cigs: ' + cigs.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
@@ -133,6 +134,8 @@
             soberL = game.add.text(20, 140, 'sober: ' + sober.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
             hungryL = game.add.text(20, 160, 'hungry: ' + hungry.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
             boredL = game.add.text(20, 180, 'bored: ' + bored.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+
+            //petButton = game.add.button(game.world.centerX, game.world.centerY, 'petButton', _ => --bored, this, 2, 1, 0);
 
             //  Here we'll create a basic looped event.
             //  A looped event is like a repeat event but with no limit, it will literally repeat itself forever, or until you stop it.
