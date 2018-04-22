@@ -108,11 +108,15 @@
             game.load.image('pcat_neutral', 'assets/images/tempcat.png');
             game.load.image('betButton', 'assets/images/betButton.png');
             game.load.image('nextButton', 'assets/images/carddeck.png');
+            game.load.image('blankcard', 'assets/images/blankcard.png');
 
             game.load.image('eyel', 'assets/images/eyel.png');
             game.load.image('eyer', 'assets/images/eyer.png');
 
             game.load.bitmapFont('child', 'assets/images/ashcan.png', 'assets/images/ashcan.fnt');
+        
+            game.load.spritesheet('cvalue', 'assets/images/cvalue60x70.png', 60, 70, 13);
+            game.load.spritesheet('csuit', 'assets/images/csuits100x100.png', 100, 100, 4);
         }
 
         function create() {
@@ -154,6 +158,35 @@
             betButton.anchor.set(0.5);
             betButton.inputEnabled = true;
             betButton.events.onInputDown.add(betButtonAction, this);
+
+            leftCard = game.add.sprite(200, 240, 'blankcard');
+            leftCard.anchor.set(0);
+            leftCard.scale.set(.5);
+            lefttl = leftCard.addChild(game.make.sprite(10, 10, 'cvalue'))
+            leftbr = leftCard.addChild(game.make.sprite(180, 300, 'cvalue'))
+            leftc = leftCard.addChild(game.make.sprite(85, 140, 'csuit'))
+
+            rightCard = game.add.sprite(520, 240, 'blankcard');
+            rightCard.anchor.set(0);
+            rightCard.scale.set(.5);
+            righttl = rightCard.addChild(game.make.sprite(10, 10, 'cvalue'))
+            rightbr = rightCard.addChild(game.make.sprite(180, 300, 'cvalue'))
+            rightc = rightCard.addChild(game.make.sprite(85, 140, 'csuit'))
+
+            drawnCard = game.add.sprite(360, 240, 'blankcard');
+            drawnCard.anchor.set(0);
+            drawnCard.scale.set(.5);
+            drawntl = drawnCard.addChild(game.make.sprite(10, 10, 'cvalue'))
+            drawnbr = drawnCard.addChild(game.make.sprite(180, 300, 'cvalue'))
+            drawnc = drawnCard.addChild(game.make.sprite(85, 140, 'csuit'))
+            
+            bonusCard = game.add.sprite(370, 250, 'blankcard');
+            bonusCard.anchor.set(0);
+            bonusCard.scale.set(.5);
+            bonustl = bonusCard.addChild(game.make.sprite(10, 10, 'cvalue'))
+            bonusbr = bonusCard.addChild(game.make.sprite(180, 300, 'cvalue'))
+            bonusc = bonusCard.addChild(game.make.sprite(85, 140, 'csuit'))
+
 
             dealersCard.elem = game.add.bitmapText(315, 475, 'child', "Dealers Card", 24);
             yourCard1.elem = game.add.bitmapText(435, 490, 'child', "Your Card", 24);
