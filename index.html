@@ -13,48 +13,26 @@
 </head>
 
 <body>
-    <button onclick="bored--">Pet</button>
-    <button onclick="buycatnip()">Buy catnip</button>
-    <button onclick="buycigs()">Buy cigs</button>
-    <button onclick="buywine()">Buy Wine</button>
-    <button onclick="buytuna()">Buy tuna</button>
-
-    <div>
-        <h2 style="display: inline-block;">Dealers Card:</h2>
-        <h3 id="dealersCard" style="display: inline-block;"></h3>
-    </div>
-    <div>
-        <h2 style="display: inline-block;">Your first card:</h2>
-        <h3 id="yourCard1" style="display: inline-block;"></h3>
-    </div>
-    <div>
-        <h2 style="display: inline-block;">Your second Card:</h2>
-        <h3 id="yourCard2" style="display: inline-block;"></h3>
-    </div>
-    <div>
-        <h2 style="display: inline-block;">Bonus Card:</h2>
-        <h3 id="bonusCard" style="display: inline-block;"></h3>
-    </div>
     <script type="text/javascript">
         const SUITS = ['Spades', 'Clubs', 'Hearts', 'Diamonds'];
         const NAMES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
 
-        function DOMLink(elem) {
-            this.elem = elem;
+        function DOMLink() {
+            this.elem = null;
             this.val = null;
             this.update = function (val = null) {
                 if (val !== null) {
                     this.val = val;
                 }
                 if (this.val === null && typeof this.val === "object") {
-                    this.elem.innerText = "";
+                    this.elem.setText("");
                 } else {
-                    this.elem.innerText = this.val.toString();
+                    this.elem.setText(this.val.toString());
                 }
             };
             this.empty = function () {
                 this.val = null;
-                this.elem.innerText = "";
+                this.elem.setText("");
             };
         }
 
@@ -99,23 +77,13 @@
         }
 
         var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'prison-cats', { preload: preload, create: create, render: render });
-
-        let dealersCard = new DOMLink(document.getElementById("dealersCard"));
-        let yourCard1 = new DOMLink(document.getElementById("yourCard1"));
-        let yourCard2 = new DOMLink(document.getElementById("yourCard2"));
-        let bonusCard = new DOMLink(document.getElementById("bonusCard"));
-        let wallet = new Wallet();
-        let bet = document.getElementById("bet");
-        let skip = document.getElementById("skip");
-        let next = document.getElementById("next");
         let deck;
-
-        function preload() {
-            game.load.image('background', 'assets/images/ruffhud1.png');
-            game.load.image('pcat_neutral2', 'assets/images/pcat_neutral2.png');
-            game.load.image('betButton', 'assets/images/betButton.png');
-            game.load.image('nextButton', 'assets/images/nextButton.png');
-        }
+        let dealersCard = new DOMLink();
+        let yourCard1 = new DOMLink();
+        let yourCard2 = new DOMLink();
+        let bonusCard = new DOMLink();
+        let wallet = new Wallet();
+        let betAmount = 1;
 
         var catnip = 0;
         var cigs = 0;
@@ -134,6 +102,13 @@
 
         var catattack = 0;
 
+        function preload() {
+            game.load.image('background', 'assets/images/ruffhud1.png');
+            game.load.image('pcat_neutral', 'assets/images/pcat_neutral.png');
+            game.load.image('betButton', 'assets/images/betButton.png');
+            game.load.image('nextButton', 'assets/images/nextButton.png');
+        }
+
         function create() {
             game.stage.backgroundColor = '#ffffff';
             background = game.add.tileSprite(0, 0, 800, 600, 'background');
@@ -151,8 +126,9 @@
             catattackL = game.add.text(20, 200, 'catattack: ' + catattack.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
 
             wallet.elem = game.add.text(20, 580, wallet.toString(), { font: "16px Arial", fill: "#000000", algin: "center" });
+            betL = game.add.text(20, 560, "Bet: $" + betAmount.toFixed(2).toString(), { font: "16px Arial", fill: "#000000", algin: "center" })
 
-            petButton = game.add.sprite(game.world.centerX, game.world.centerY + 60, 'pcat_neutral2');
+            petButton = game.add.sprite(game.world.centerX, game.world.centerY + 60, 'pcat_neutral');
             petButton.anchor.set(0.5);
             petButton.inputEnabled = true;
             petButton.events.onInputDown.add(() => --bored, this);
@@ -163,11 +139,45 @@
             betButton.inputEnabled = true;
             betButton.events.onInputDown.add(betButtonAction, this);
 
+            dealersCard.elem = game.add.text(315, 475, "Dealers Card", { font: "16px Arial", fill: "#000000", align: "left" });
+            yourCard1.elem = game.add.text(435, 490, "Your Card", { font: "16px Arial", fill: "#000000", align: "left" });
+            bonusCard.elem = game.add.text(435, 535, "", { font: "16px Arial", fill: "#000000", align: "left" });
+
+            yourCard2.elem = game.add.text(465, 525, 'Draw', { font: "16px Arial", fill: "#000000", align: "center" });
+            yourCard2.elem.anchor.set(0.5);
+            yourCard2.elem.inputEnabled = true;
+            yourCard2.elem.events.onInputDown.add(drawSecondCard, this);
+
             nextButton = game.add.sprite(605, 480, 'nextButton');
             nextButton.anchor.set(0.5);
             nextButton.inputEnabled = true;
             nextButton.events.onInputDown.add(nextButtonAction, this);
 
+            buyCatnipButton = game.add.text(300, 50, "Buy Catnip", { font: "16px Arial", fill: "#000000", align: "left" });
+            buyCatnipButton.anchor.set(0.5);
+            buyCatnipButton.inputEnabled = true;
+            buyCatnipButton.events.onInputDown.add(buycatnip, this);
+
+            buyCigsButton = game.add.text(300, 100, "Buy Cigs", { font: "16px Arial", fill: "#000000", align: "left" });
+            buyCigsButton.anchor.set(0.5);
+            buyCigsButton.inputEnabled = true;
+            buyCigsButton.events.onInputDown.add(buycigs, this);
+
+            buyWineButton = game.add.text(450, 50, "Buy Wine", { font: "16px Arial", fill: "#000000", align: "left" });
+            buyWineButton.anchor.set(0.5);
+            buyWineButton.inputEnabled = true;
+            buyWineButton.events.onInputDown.add(buywine, this);
+
+            buyTunaButton = game.add.text(450, 100, "Buy Tuna", { font: "16px Arial", fill: "#000000", align: "left" });
+            buyTunaButton.anchor.set(0.5);
+            buyTunaButton.inputEnabled = true;
+            buyTunaButton.events.onInputDown.add(buytuna, this);
+
+            deck = getDeck();
+            d3.shuffle(deck);
+            dealersCard.update(deck.pop());
+            yourCard1.update(deck.pop());
+            wallet.update();
             //  Here we'll create a basic looped event.
             //  A looped event is like a repeat event but with no limit, it will literally repeat itself forever, or until you stop it.
 
@@ -320,39 +330,33 @@
             }
         }
 
-        function initialize() {
-            deck = getDeck();
-            d3.shuffle(deck);
-            dealersCard.update(deck.pop());
-            yourCard1.update(deck.pop());
-            wallet.update();
-        }
-
         function endHand() {
             betButton.inputEnabled = false;
+            yourCard2.elem.inputEnabled = false;
         }
 
         function betButtonAction() {
-            let amount = NaN;
-
-            while (isNaN(amount) || amount < 0.01 || amount > wallet.value) {
-                amount = parseFloat(prompt("Bet amount:", wallet.value.toString()));
+            betAmount = betAmount >= 3 ? 1 : betAmount + 1;
+            if (betAmount > wallet.value) {
+                betAmount = wallet.value;
             }
+            betL.setText("Bet: $" + betAmount.toFixed(2).toString());
+        }
 
+        function drawSecondCard() {
             checkDeckSize();
-
             yourCard2.update(deck.pop());
             if ((yourCard2.val.compare(dealersCard.val) == 1 && yourCard2.val.compare(yourCard1.val) == -1) ||
                 (yourCard2.val.compare(dealersCard.val) == -1 && yourCard2.val.compare(yourCard1.val) == 1)) {
                 bonusCard.update(deck.pop());
                 if ((bonusCard.val.compare(dealersCard.val) == 1 && bonusCard.val.compare(yourCard1.val) == -1) ||
                     (bonusCard.val.compare(dealersCard.val) == -1 && bonusCard.val.compare(yourCard1.val) == 1)) {
-                    wallet.update(amount * 2);
+                    wallet.update(betAmount * 2);
                 } else {
-                    wallet.update(amount);
+                    wallet.update(betAmount);
                 }
             } else {
-                wallet.update(-1 * amount);
+                wallet.update(-1 * betAmount);
             }
 
             endHand();
@@ -367,13 +371,13 @@
                 dealersCard.update(deck.pop());
                 yourCard1.update(deck.pop());
                 yourCard2.empty();
+                yourCard2.elem.setText("Draw");
                 bonusCard.empty();
 
                 betButton.inputEnabled = true;
+                yourCard2.elem.inputEnabled = true;
             }
         }
-
-        initialize();
     </script>
 </body>
 
