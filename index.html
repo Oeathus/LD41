@@ -121,16 +121,16 @@
             background = game.add.tileSprite(0, 0, 800, 600, 'background');
 
             catnipL = game.add.bitmapText(20, 20, 'child', 'Catnip: ' + catnip.toFixed(2), 24);
-            cigsL = game.add.text(20, 40, 'cigs: ' + cigs.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
-            wineL = game.add.text(20, 60, 'wine: ' + wine.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
-            tunaL = game.add.text(20, 80, 'tuna: ' + tuna.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+            cigsL = game.add.bitmapText(20, 40, 'child', 'Cigs: ' + cigs.toFixed(2), 24);
+            wineL = game.add.bitmapText(20, 60, 'child', 'Wine: ' + wine.toFixed(2), 24);
+            tunaL = game.add.bitmapText(20, 80, 'child', 'Tuna: ' + tuna.toFixed(2), 24);
 
-            nicfitL = game.add.text(20, 120, 'nicfit: ' + nicfit.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
-            soberL = game.add.text(20, 140, 'sober: ' + sober.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
-            hungryL = game.add.text(20, 160, 'hungry: ' + hungry.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
-            boredL = game.add.text(20, 180, 'bored: ' + bored.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+            nicfitL = game.add.bitmapText(20, 120, 'child', 'Nicfit: ' + nicfit.toFixed(2), 24);
+            soberL = game.add.bitmapText(20, 140, 'child', 'Sober: ' + sober.toFixed(2), 24);
+            hungryL = game.add.bitmapText(20, 160, 'child', 'Hungry: ' + hungry.toFixed(2), 24);
+            boredL = game.add.bitmapText(20, 180, 'child', 'Bored: ' + bored.toFixed(2), 24);
 
-            catattackL = game.add.text(20, 200, 'catattack: ' + catattack.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+            catattackL = game.add.bitmapText(20, 200, 'child', 'Catattack: ' + catattack.toFixed(2),24);
 
             wallet.elem = game.add.bitmapText(20, 540, 'child', wallet.toString(), 24);
             betL = game.add.bitmapText(20, 566, 'child', "Bet: $" + betAmount.toFixed(2).toString(), 24);
@@ -155,11 +155,11 @@
             betButton.inputEnabled = true;
             betButton.events.onInputDown.add(betButtonAction, this);
 
-            dealersCard.elem = game.add.text(315, 475, "Dealers Card", { font: "16px Arial", fill: "#000000", align: "left" });
-            yourCard1.elem = game.add.text(435, 490, "Your Card", { font: "16px Arial", fill: "#000000", align: "left" });
-            bonusCard.elem = game.add.text(435, 535, "", { font: "16px Arial", fill: "#000000", align: "left" });
+            dealersCard.elem = game.add.bitmapText(315, 475, 'child', "Dealers Card", 24);
+            yourCard1.elem = game.add.bitmapText(435, 490, 'child', "Your Card", 24);
+            bonusCard.elem = game.add.bitmapText(435, 535, 'child', "", 24);
 
-            yourCard2.elem = game.add.text(465, 525, 'Draw', { font: "16px Arial", fill: "#000000", align: "center" });
+            yourCard2.elem = game.add.bitmapText(465, 525, 'child', 'Draw', 24);
             yourCard2.elem.anchor.set(0.5);
             yourCard2.elem.inputEnabled = true;
             yourCard2.elem.events.onInputDown.add(drawSecondCard, this);
@@ -169,22 +169,22 @@
             nextButton.inputEnabled = true;
             nextButton.events.onInputDown.add(nextButtonAction, this);
 
-            buyCatnipButton = game.add.text(300, 50, "Buy Catnip", { font: "16px Arial", fill: "#000000", align: "left" });
+            buyCatnipButton = game.add.bitmapText(300, 50, 'child', "Buy Catnip", 24);
             buyCatnipButton.anchor.set(0.5);
             buyCatnipButton.inputEnabled = true;
             buyCatnipButton.events.onInputDown.add(buycatnip, this);
 
-            buyCigsButton = game.add.text(300, 100, "Buy Cigs", { font: "16px Arial", fill: "#000000", align: "left" });
+            buyCigsButton = game.add.bitmapText(300, 100, 'child', "Buy Cigs", 24);
             buyCigsButton.anchor.set(0.5);
             buyCigsButton.inputEnabled = true;
             buyCigsButton.events.onInputDown.add(buycigs, this);
 
-            buyWineButton = game.add.text(450, 50, "Buy Wine", { font: "16px Arial", fill: "#000000", align: "left" });
+            buyWineButton = game.add.bitmapText(450, 50, 'child', "Buy Wine", 24);
             buyWineButton.anchor.set(0.5);
             buyWineButton.inputEnabled = true;
             buyWineButton.events.onInputDown.add(buywine, this);
 
-            buyTunaButton = game.add.text(450, 100, "Buy Tuna", { font: "16px Arial", fill: "#000000", align: "left" });
+            buyTunaButton = game.add.bitmapText(450, 100, 'child', "Buy Tuna", 24);
             buyTunaButton.anchor.set(0.5);
             buyTunaButton.inputEnabled = true;
             buyTunaButton.events.onInputDown.add(buytuna, this);
@@ -283,16 +283,16 @@
 
 
             catnipL.setText('Catnip: ' + (catnip * 3.5).toFixed(2));
-            cigsL.setText('cigs: ' + (cigs * 20).toFixed(2));
-            wineL.setText('wine: ' + (wine * 750).toFixed(2));
-            tunaL.setText('tuna: ' + (tuna * 12).toFixed(2));
+            cigsL.setText('Cigs: ' + (cigs * 20).toFixed(2));
+            wineL.setText('Wine: ' + (wine * 750).toFixed(2));
+            tunaL.setText('Tuna: ' + (tuna * 12).toFixed(2));
 
-            nicfitL.setText('nicfit: ' + nicfit.toFixed(2));
-            soberL.setText('sober: ' + sober.toFixed(2));
-            hungryL.setText('hungry: ' + hungry.toFixed(2));
-            boredL.setText('bored: ' + bored.toFixed(2));
+            nicfitL.setText('Nicfit: ' + nicfit.toFixed(2));
+            soberL.setText('Sober: ' + sober.toFixed(2));
+            hungryL.setText('Hungry: ' + hungry.toFixed(2));
+            boredL.setText('Bored: ' + bored.toFixed(2));
 
-            catattackL.setText('bonus: ' + catattack.toFixed(2));
+            catattackL.setText('Bonus: ' + catattack.toFixed(2));
         }
 
         function render() {
