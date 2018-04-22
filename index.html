@@ -110,7 +110,7 @@
             game.load.image('eyer', 'assets/images/eyer.png');
 
             game.load.bitmapFont('child', 'assets/images/ashcan.png', 'assets/images/ashcan.fnt');
-        
+
             game.load.spritesheet('cvalue', 'assets/images/cvalue60x70.png', 60, 70, 13);
             game.load.spritesheet('csuit', 'assets/images/csuits100x100.png', 100, 100, 4);
         }
@@ -119,18 +119,6 @@
             game.physics.startSystem(Phaser.Physics.ARCADE);
             game.stage.backgroundColor = '#ffffff';
             background = game.add.tileSprite(0, 0, 800, 600, 'background');
-
-            catnipL = game.add.bitmapText(20, 20, 'child', 'Catnip: ' + catnip.toFixed(2), 24);
-            cigsL = game.add.bitmapText(20, 40, 'child', 'Cigs: ' + cigs.toFixed(2), 24);
-            wineL = game.add.bitmapText(20, 60, 'child', 'Wine: ' + wine.toFixed(2), 24);
-            tunaL = game.add.bitmapText(20, 80, 'child', 'Tuna: ' + tuna.toFixed(2), 24);
-
-            nicfitL = game.add.bitmapText(20, 120, 'child', 'Nicfit: ' + nicfit.toFixed(2), 24);
-            soberL = game.add.bitmapText(20, 140, 'child', 'Sober: ' + sober.toFixed(2), 24);
-            hungryL = game.add.bitmapText(20, 160, 'child', 'Hungry: ' + hungry.toFixed(2), 24);
-            boredL = game.add.bitmapText(20, 180, 'child', 'Bored: ' + bored.toFixed(2), 24);
-
-            catattackL = game.add.bitmapText(20, 200, 'child', 'Bonus: ' + catattack.toFixed(2),24);
 
             wallet.elem = game.add.bitmapText(20, 540, 'child', wallet.toString(), 24);
             betL = game.add.bitmapText(20, 566, 'child', "Bet: $" + betAmount.toFixed(2).toString(), 24);
@@ -149,6 +137,18 @@
             petButton.inputEnabled = true;
             petButton.events.onInputDown.add(() => --bored, this);
             petButton.scale.setTo(0.75, 0.75);
+
+            catnipL = game.add.bitmapText(20, 20, 'child', 'Catnip: ' + catnip.toFixed(2), 24);
+            cigsL = game.add.bitmapText(20, 40, 'child', 'Cigs: ' + cigs.toFixed(2), 24);
+            wineL = game.add.bitmapText(20, 60, 'child', 'Wine: ' + wine.toFixed(2), 24);
+            tunaL = game.add.bitmapText(20, 80, 'child', 'Tuna: ' + tuna.toFixed(2), 24);
+
+            nicfitL = game.add.bitmapText(20, 120, 'child', 'Nicfit: ' + nicfit.toFixed(2), 24);
+            soberL = game.add.bitmapText(20, 140, 'child', 'Sober: ' + sober.toFixed(2), 24);
+            hungryL = game.add.bitmapText(20, 160, 'child', 'Hungry: ' + hungry.toFixed(2), 24);
+            boredL = game.add.bitmapText(20, 180, 'child', 'Bored: ' + bored.toFixed(2), 24);
+
+            catattackL = game.add.bitmapText(20, 200, 'child', 'Bonus: ' + catattack.toFixed(2), 24);
 
             betButton = game.add.sprite(240, 500, 'betButton');
             betButton.anchor.set(0.5);
@@ -174,10 +174,12 @@
             yourCard2.elem = game.add.sprite(360, 240, 'blankcard');
             yourCard2.elem.anchor.set(0);
             yourCard2.elem.scale.set(.5);
+            yourCard2.elem.inputEnabled = true;
+            yourCard2.elem.events.onInputDown.add(drawBonusCard, this);
             yourCard2.tl = yourCard2.elem.addChild(game.make.sprite(10, 10, 'cvalue'));
             yourCard2.br = yourCard2.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
             yourCard2.c = yourCard2.elem.addChild(game.make.sprite(85, 140, 'csuit'));
-            
+
             bonusCard.elem = game.add.sprite(390, 270, 'blankcard');
             bonusCard.elem.anchor.set(0);
             bonusCard.elem.scale.set(.5);
@@ -400,18 +402,27 @@
             yourCard2.update(deck.pop());
             if ((yourCard2.val.compare(dealersCard.val) == 1 && yourCard2.val.compare(yourCard1.val) == -1) ||
                 (yourCard2.val.compare(dealersCard.val) == -1 && yourCard2.val.compare(yourCard1.val) == 1)) {
-                bonusCard.update(deck.pop());
-                if ((bonusCard.val.compare(dealersCard.val) == 1 && bonusCard.val.compare(yourCard1.val) == -1) ||
-                    (bonusCard.val.compare(dealersCard.val) == -1 && bonusCard.val.compare(yourCard1.val) == 1)) {
-                    wallet.update(betAmount * 2);
-                } else {
-                    wallet.update(betAmount);
-                }
+                yourCard2.elem.inputEnabled = true;
+                yourCard1.elem.inputEnabled = false;
+                betButton.inputEnabled = false;
+                nextButton.inputEnabled = false;
             } else {
                 wallet.update(-1 * betAmount);
+                endHand();
             }
+        }
 
-            endHand();
+        function drawBonusCard() {
+            checkDeckSize();
+            bonusCard.update(deck.pop());
+            if ((bonusCard.val.compare(dealersCard.val) == 1 && bonusCard.val.compare(yourCard2.val) == -1) ||
+                (bonusCard.val.compare(dealersCard.val) == -1 && bonusCard.val.compare(yourCard2.val) == 1)) {
+                wallet.update(betAmount * 2);
+            } else {
+                wallet.update(betAmount);
+            }
+            yourCard2.elem.inputEnabled = false;
+            nextButton.inputEnabled = true;
         }
 
         function nextButtonAction() {
@@ -439,10 +450,10 @@
 
                     betButton.inputEnabled = true;
                     yourCard1.elem.inputEnabled = true;
+                    yourCard2.elem.inputEnabled = false;
                 } else {
                     yourCard1.empty();
                     dealersCard.empty();
-                    dealersCard.elem.setText("You have no money!");
                 }
             }
         }
