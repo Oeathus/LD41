@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Phaser - Making your first game, part 8</title>
-    <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+    <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.min.js"></script>
     <script src="//d3js.org/d3.v5.min.js"></script>
     <style type="text/css">
         body {
@@ -123,11 +123,18 @@
         var cigs = 0;
         var wine = 0;
         var tuna = 0;
+        
+        var catnipprice = 40;
+        var cigsprice = 10;
+        var wineprice = 5;
+        var tunaprice = 1.5;
 
         var nicfit = 0;
         var sober = 0;
         var hungry = 0;
         var bored = 0;
+
+        var catattack = 0;
 
         function create() {
             game.stage.backgroundColor = '#ffffff';
@@ -142,6 +149,8 @@
             soberL = game.add.text(20, 140, 'sober: ' + sober.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
             hungryL = game.add.text(20, 160, 'hungry: ' + hungry.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
             boredL = game.add.text(20, 180, 'bored: ' + bored.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+
+            catattackL = game.add.text(20, 200, 'catattack: ' + catattack.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
 
             wallet.elem = game.add.text(20, 580, wallet.toString(), { font: "16px Arial", fill: "#000000", algin: "center"});
 
@@ -176,7 +185,7 @@
             }
 
             if (cigs > 0) {
-                cigs -= .01
+                cigs -= .05
 
                 hungry -= .03;
                 nicfit -= .12;
@@ -186,7 +195,7 @@
             }
 
             if (wine > 0) {
-                wine -= .01
+                wine -= .02
 
                 bored -= .06;
                 nicfit += .03;
@@ -197,7 +206,7 @@
             }
 
             if (tuna > 0) {
-                tuna -= .01;
+                tuna -= .13;
 
                 hungry -= .06;
                 sober += .04;
@@ -219,6 +228,18 @@
                 bored = 0;
             }
 
+            catattack += (nicfit+sober+hungry+bored - 1)*2;
+
+            if(catattack < 0 ){
+                catattack = 0;
+            }
+
+            if(catattack > 1){
+                catattack = 0;
+                bored = 0;
+                alert('catATTACK');
+            }
+
             catnipL.setText('catnip: ' + (catnip * 3.5).toFixed(2));
             cigsL.setText('cigs: ' + (cigs * 20).toFixed(2));
             wineL.setText('wine: ' + (wine * 750).toFixed(2));
@@ -228,10 +249,48 @@
             soberL.setText('sober: ' + sober.toFixed(2));
             hungryL.setText('hungry: ' + hungry.toFixed(2));
             boredL.setText('bored: ' + bored.toFixed(2));
+
+            catattackL.setText('catattack: ' + catattack.toFixed(2));
         }
 
         function render() {
         }
+
+        function buycatnip(){
+    if(wallet.value>catnipprice){
+        wallet.value -= catnipprice;
+        wallet.update();
+        catnipprice*=1.4;
+        catnip++;
+    }
+}
+
+function buycigs(){
+    if(wallet.value>cigsprice){
+        wallet.value -= cigsprice;
+        wallet.update();
+        cigsprice*=1.05;
+        cigs++;
+    }
+}
+
+function buywine(){
+    if(wallet.value>wineprice){
+        wallet.value -= wineprice;
+        wallet.update();
+        wineprice*=1.7;
+        wine++;
+    }
+}
+
+function buytuna(){
+    if(wallet.value>tunaprice){
+        wallet.value -= tunaprice;
+        wallet.update();
+        tunaprice*=1.2;
+        tuna++;
+    }
+}
 
         function getDeck() {
             let cards = [];
