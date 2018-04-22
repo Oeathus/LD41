@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Phaser - Making your first game, part 8</title>
-    <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+    <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.min.js"></script>
     <script src="//d3js.org/d3.v5.min.js"></script>
     <style type="text/css">
         body {
@@ -14,10 +14,10 @@
 
 <body>
     <button onclick="bored--">Pet</button>
-    <button onclick="catnip += 1">Buy catnip</button>
-    <button onclick="cigs += 1">Buy cigs</button>
-    <button onclick="wine += 1">Buy Wine</button>
-    <button onclick="tuna += 1">Buy tuna</button>
+    <button onclick="buycatnip()">Buy catnip</button>
+    <button onclick="buycigs()">Buy cigs</button>
+    <button onclick="buywine()">Buy Wine</button>
+    <button onclick="buytuna()">Buy tuna</button>
 
     <div>
         <h2 style="display: inline-block;">Dealers Card:</h2>
@@ -35,10 +35,6 @@
         <h2 style="display: inline-block;">Bonus Card:</h2>
         <h3 id="bonusCard" style="display: inline-block;"></h3>
     </div>
-    <p id="wallet"></p>
-    <button id="bet">Bet</button>
-    <button id="skip">Skip</button>
-    <button id="next" style="display: none;">Next Hand</button>
     <script type="text/javascript">
         const SUITS = ['Spades', 'Clubs', 'Hearts', 'Diamonds'];
         const NAMES = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King', 'Ace'];
@@ -118,6 +114,7 @@
             game.load.image('background', 'assets/images/ruffhud1.png');
             game.load.image('pcat_neutral2', 'assets/images/pcat_neutral2.png');
             game.load.image('betButton', 'assets/images/betButton.png');
+            game.load.image('nextButton', 'assets/images/nextButton.png');
         }
 
         var catnip = 0;
@@ -125,10 +122,17 @@
         var wine = 0;
         var tuna = 0;
 
+        var catnipprice = 40;
+        var cigsprice = 10;
+        var wineprice = 5;
+        var tunaprice = 1.5;
+
         var nicfit = 0;
         var sober = 0;
         var hungry = 0;
         var bored = 0;
+
+        var catattack = 0;
 
         function create() {
             game.stage.backgroundColor = '#ffffff';
@@ -144,6 +148,8 @@
             hungryL = game.add.text(20, 160, 'hungry: ' + hungry.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
             boredL = game.add.text(20, 180, 'bored: ' + bored.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
 
+            catattackL = game.add.text(20, 200, 'catattack: ' + catattack.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
+
             wallet.elem = game.add.text(20, 580, wallet.toString(), { font: "16px Arial", fill: "#000000", algin: "center" });
 
             petButton = game.add.sprite(game.world.centerX, game.world.centerY + 60, 'pcat_neutral2');
@@ -156,6 +162,11 @@
             betButton.anchor.set(0.5);
             betButton.inputEnabled = true;
             betButton.events.onInputDown.add(betButtonAction, this);
+
+            nextButton = game.add.sprite(605, 480, 'nextButton');
+            nextButton.anchor.set(0.5);
+            nextButton.inputEnabled = true;
+            nextButton.events.onInputDown.add(nextButtonAction, this);
 
             //  Here we'll create a basic looped event.
             //  A looped event is like a repeat event but with no limit, it will literally repeat itself forever, or until you stop it.
@@ -182,7 +193,7 @@
             }
 
             if (cigs > 0) {
-                cigs -= .01
+                cigs -= .05
 
                 hungry -= .03;
                 nicfit -= .12;
@@ -192,7 +203,7 @@
             }
 
             if (wine > 0) {
-                wine -= .01
+                wine -= .02
 
                 bored -= .06;
                 nicfit += .03;
@@ -203,7 +214,7 @@
             }
 
             if (tuna > 0) {
-                tuna -= .01;
+                tuna -= .13;
 
                 hungry -= .06;
                 sober += .04;
@@ -225,6 +236,18 @@
                 bored = 0;
             }
 
+            catattack += (nicfit + sober + hungry + bored - 1) * 2;
+
+            if (catattack < 0) {
+                catattack = 0;
+            }
+
+            if (catattack > 1) {
+                catattack = 0;
+                bored = 0;
+                alert('catATTACK');
+            }
+
             catnipL.setText('catnip: ' + (catnip * 3.5).toFixed(2));
             cigsL.setText('cigs: ' + (cigs * 20).toFixed(2));
             wineL.setText('wine: ' + (wine * 750).toFixed(2));
@@ -234,9 +257,47 @@
             soberL.setText('sober: ' + sober.toFixed(2));
             hungryL.setText('hungry: ' + hungry.toFixed(2));
             boredL.setText('bored: ' + bored.toFixed(2));
+
+            catattackL.setText('catattack: ' + catattack.toFixed(2));
         }
 
         function render() {
+        }
+
+        function buycatnip() {
+            if (wallet.value > catnipprice) {
+                wallet.value -= catnipprice;
+                wallet.update();
+                catnipprice *= 1.4;
+                catnip++;
+            }
+        }
+
+        function buycigs() {
+            if (wallet.value > cigsprice) {
+                wallet.value -= cigsprice;
+                wallet.update();
+                cigsprice *= 1.05;
+                cigs++;
+            }
+        }
+
+        function buywine() {
+            if (wallet.value > wineprice) {
+                wallet.value -= wineprice;
+                wallet.update();
+                wineprice *= 1.7;
+                wine++;
+            }
+        }
+
+        function buytuna() {
+            if (wallet.value > tunaprice) {
+                wallet.value -= tunaprice;
+                wallet.update();
+                tunaprice *= 1.2;
+                tuna++;
+            }
         }
 
         function getDeck() {
@@ -268,9 +329,7 @@
         }
 
         function endHand() {
-            bet.style.display = "none";
-            skip.style.display = "none";
-            next.style.display = "inline-block";
+            betButton.inputEnabled = false;
         }
 
         function betButtonAction() {
@@ -299,23 +358,22 @@
             endHand();
         }
 
+        function nextButtonAction() {
+            if (betButton.inputEnabled) {
+                checkDeckSize();
+                yourCard2.update(deck.pop());
+                endHand();
+            } else {
+                dealersCard.update(deck.pop());
+                yourCard1.update(deck.pop());
+                yourCard2.empty();
+                bonusCard.empty();
+
+                betButton.inputEnabled = true;
+            }
+        }
+
         initialize();
-
-        skip.addEventListener('click', function (e) {
-            checkDeckSize();
-            yourCard2.update(deck.pop());
-            endHand();
-        });
-
-        next.addEventListener('click', function (e) {
-            dealersCard.update(deck.pop());
-            yourCard1.update(deck.pop());
-            yourCard2.empty();
-            bonusCard.empty();
-            bet.style.display = "inline-block";
-            skip.style.display = "inline-block";
-            next.style.display = "none";
-        });
     </script>
 </body>
 
