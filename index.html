@@ -87,7 +87,7 @@
         function Wallet(startingAmount = 20.00) {
             this.elem = null;
             this.value = startingAmount;
-            this.toString = function() {
+            this.toString = function () {
                 return "$" + this.value.toFixed(2).toString();
             };
             this.update = function (val = NaN) {
@@ -117,6 +117,7 @@
         function preload() {
             game.load.image('background', 'assets/images/ruffhud1.png');
             game.load.image('pcat_neutral2', 'assets/images/pcat_neutral2.png');
+            game.load.image('betButton', 'assets/images/betButton.png');
         }
 
         var catnip = 0;
@@ -143,13 +144,18 @@
             hungryL = game.add.text(20, 160, 'hungry: ' + hungry.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
             boredL = game.add.text(20, 180, 'bored: ' + bored.toFixed(2), { font: "12px Arial", fill: "#000000", align: "center" });
 
-            wallet.elem = game.add.text(20, 580, wallet.toString(), { font: "16px Arial", fill: "#000000", algin: "center"});
+            wallet.elem = game.add.text(20, 580, wallet.toString(), { font: "16px Arial", fill: "#000000", algin: "center" });
 
             petButton = game.add.sprite(game.world.centerX, game.world.centerY + 60, 'pcat_neutral2');
             petButton.anchor.set(0.5);
             petButton.inputEnabled = true;
-            petButton.events.onInputDown.add(()=>--bored, this);
-            petButton.scale.setTo(0.35,0.35);
+            petButton.events.onInputDown.add(() => --bored, this);
+            petButton.scale.setTo(0.35, 0.35);
+
+            betButton = game.add.sprite(240, 500, 'betButton');
+            betButton.anchor.set(0.5);
+            betButton.inputEnabled = true;
+            betButton.events.onInputDown.add(betButtonAction, this);
 
             //  Here we'll create a basic looped event.
             //  A looped event is like a repeat event but with no limit, it will literally repeat itself forever, or until you stop it.
@@ -267,9 +273,7 @@
             next.style.display = "inline-block";
         }
 
-        initialize();
-
-        bet.addEventListener('click', function (e) {
+        function betButtonAction() {
             let amount = NaN;
 
             while (isNaN(amount) || amount < 0.01 || amount > wallet.value) {
@@ -293,7 +297,9 @@
             }
 
             endHand();
-        });
+        }
+
+        initialize();
 
         skip.addEventListener('click', function (e) {
             checkDeckSize();
