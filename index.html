@@ -91,7 +91,6 @@
 
         function preload() {
             game.load.image('background', 'assets/images/cellmockup2.png');
-            game.load.image('betButton', 'assets/images/betButton.png');
             game.load.image('cardDeck', 'assets/images/carddeck.png');
             game.load.image('blankcard', 'assets/images/blankcard.png');
             game.load.image('bettext', 'assets/images/bettext84x32.png');
@@ -364,7 +363,7 @@
                 betButton.inputEnabled = true;
                 betlabel.visible = true;
                 betButton.frame = Math.round(betAmount);
-                betL.setText("Bet: $" + betAmount.toFixed(2).toString());
+                betL.setText("$" + betAmount.toFixed(2).toString());
             }
         }
     </script>
