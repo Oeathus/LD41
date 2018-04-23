@@ -160,6 +160,7 @@
             leftCard.tl = leftCard.elem.addChild(game.make.sprite(10, 10, 'cvalue'));
             leftCard.br = leftCard.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
             leftCard.c = leftCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
+            leftCard.elem.events.onInputDown.add(catFreakout, this);
 
             rightCard.elem = game.add.sprite(520, 240, 'blankcard');
             rightCard.elem.anchor.set(0);
@@ -379,6 +380,48 @@
             game.camera.shake(0.05, 500);
             freakout.play();
             catGraphics.frame = 0;
+
+            if (Math.round(Math.random())) {
+                let x = Math.random()
+                switch (true) {
+                    case x > 0.666:
+                        if (hightieswin) {
+                            hightieswin = false;
+                        } else if (lowtieswin) {
+                            lowtieswin = false;
+                        } else if (betmax == 5) {
+                            betmax = 3;
+                        } else {
+                            wallet.value = 0;
+                            wallet.update();
+                        }
+                        break;
+                    case x > 0.333:
+                        if (lowtieswin) {
+                            lowtieswin = false;
+                        } else if (hightieswin) {
+                            hightieswin = false;
+                        } else if (betmax == 5) {
+                            betmax = 3;
+                        } else {
+                            wallet.value = 0;
+                            wallet.update();
+                        }
+                        break;
+                    default:
+                        if (betmax == 5) {
+                            betmax = 3;
+                        } else if (hightieswin) {
+                            hightieswin = false;
+                        } else if (lowtieswin) {
+                            lowtieswin = false;
+                        } else {
+                            wallet.value = 0;
+                            wallet.update();
+                        }
+                        break;
+                }
+            }
         }
 
         function deckCommand() {
@@ -419,7 +462,7 @@
                     deck = deck.concat(discardPile);
                     discardPile = [];
                     game.camera.shake(0.001 * catGraphics.frame, 1000);
-                    if (++catGraphics.frame == 4) {
+                    if (++catGraphics.frame == 5) {
                         setTimeout(catFreakout, 1000);
                     }
                     decklabel.frame = 4;
