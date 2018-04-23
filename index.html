@@ -105,8 +105,8 @@
             game.load.spritesheet('cvalue', 'assets/images/cvalue60x70.png', 60, 70, 13);
             game.load.spritesheet('csuit', 'assets/images/csuits100x100.png', 100, 100, 4);
             game.load.spritesheet('coinstack', 'assets/images/fishcoins75x55.png', 75, 55, 5);
-            
-            game.load.spritesheet('catimages', 'assets/images/prisoncat290x217te.png', 828, 620, 6);
+
+            game.load.spritesheet('catimages', 'assets/images/prisoncat828x620te.png', 828, 620, 6);
         }
 
         function create() {
@@ -219,19 +219,19 @@
             betL.setText("Bet: $" + betAmount.toFixed(2).toString());
         }
 
-        function myMin(x ,y){
-            if(lowtieswin){
-                return Math.min(x, y)-1;
+        function myMin(x, y) {
+            if (lowtieswin) {
+                return Math.min(x, y) - 1;
             } else {
-                return Math.min(x,y);
+                return Math.min(x, y);
             }
         }
 
-        function myMax(x ,y){
-            if(hightieswin){
-                return Math.max(x, y)+1;
+        function myMax(x, y) {
+            if (hightieswin) {
+                return Math.max(x, y) + 1;
             } else {
-                return Math.max(x,y);
+                return Math.max(x, y);
             }
         }
 
@@ -239,15 +239,16 @@
             if (gamePhase == 0) {//FIRST DRAW
                 drawnCard.update(deck.pop());
                 betButton.inputEnabled = false;
+                betlabel.visible = false;
                 if (betAmount != 0) {
                     if (drawnCard.val.value > myMin(leftCard.val.value, rightCard.val.value) && drawnCard.val.value < myMax(leftCard.val.value, rightCard.val.value)) {
                         console.log('win');
                         wallet.value += betAmount;
                         wallet.update();
-                        if(bonusrounds){//bonusrounds param
-                        gamePhase = 1;//BONUS ROUND
-                        return;
-                        } else{
+                        if (bonusrounds) {//bonusrounds param
+                            gamePhase = 1;//BONUS ROUND
+                            return;
+                        } else {
                             gamePhase = 2;
                         }
                     } else {
@@ -255,7 +256,7 @@
                         wallet.update();
                         gamePhase = 2;
                     }
-                } else{
+                } else {
                     gamePhase = 2;
                 }
             }
@@ -291,10 +292,12 @@
                 gamePhase = 0;
                 betAmount = 0;
                 betButton.inputEnabled = true;
+                betlabel.visible = true;
                 betButton.frame = Math.round(betAmount);
                 betL.setText("Bet: $" + betAmount.toFixed(2).toString());
             }
         }
     </script>
 </body>
+
 </html>
