@@ -113,6 +113,7 @@
 
             game.load.spritesheet('cvalue', 'assets/images/cvalue60x70.png', 60, 70, 13);
             game.load.spritesheet('csuit', 'assets/images/csuits100x100.png', 100, 100, 4);
+            game.load.spritesheet('coinstack', 'assets/images/fishcoins75x55.png', 75, 55, 4);
         }
 
         function create() {
@@ -150,7 +151,8 @@
 
             catattackL = game.add.bitmapText(20, 200, 'child', 'Bonus: ' + catattack.toFixed(2), 24);
 
-            betButton = game.add.sprite(240, 500, 'betButton');
+            betButton = game.add.sprite(240, 500, 'coinstack');
+            betButton.frame = 0;
             betButton.anchor.set(0.5);
             betButton.inputEnabled = true;
             betButton.events.onInputDown.add(betButtonAction, this);
@@ -240,7 +242,6 @@
                 bored -= .03;
                 hungry += .01;
                 sober -= .03;
-
             } else {
                 catnip = 0;
             }
@@ -261,7 +262,6 @@
                 bored -= .03;
                 nicfit += .01;
                 sober -= .03;
-
             } else {
                 wine = 0;
             }
@@ -271,7 +271,6 @@
 
                 hungry -= .06;
                 sober += .01;
-
             } else {
                 tuna = 0;
             }
@@ -303,8 +302,6 @@
             }
 
             catattack = (4 - (nicfit + sober + hungry + bored)) / 4;
-
-
 
             catnipL.setText('Catnip: ' + (catnip * 3.5).toFixed(2));
             cigsL.setText('Cigs: ' + (cigs * 20).toFixed(2));
@@ -394,6 +391,7 @@
             if (betAmount > wallet.value) {
                 betAmount = wallet.value;
             }
+            betButton.frame = Math.round(betAmount);
             betL.setText("Bet: $" + betAmount.toFixed(2).toString());
         }
 
