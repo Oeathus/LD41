@@ -257,7 +257,7 @@
             prunoButton.inputEnabled = true;
             prunoButton.input.useHandCursor = true;
             prunoButton.events.onInputOver.add(_ => {
-                    prunoLabel.visible = true;
+                prunoLabel.visible = true;
             }, this);
             prunoButton.events.onInputOut.add(_ => {
                 prunoLabel.visible = false;
@@ -274,9 +274,32 @@
             prunoLabel = prunoButton.addChild(game.make.bitmapText(-100, -155, 'child', "$5, increase max bet", 24));
             prunoLabel.visible = false;
 
+            catnipButton = game.make.sprite(-120, 30, 'catnip', 0);
+            catnipButton.anchor.set(0.5);
+            catnipButton.scale.setTo(.6);
+            catnipButton.inputEnabled = true;
+            catnipButton.input.useHandCursor = true;
+            catnipButton.events.onInputOver.add(_ => {
+                catnipLabel.visible = true;
+            }, this);
+            catnipButton.events.onInputOut.add(_ => {
+                catnipLabel.visible = false;
+            }, this);
+            catnipButton.events.onInputDown.add(_ => {
+                if (wallet.value > 5) {
+                    wallet.value -= 5;
+                    wallet.update();
+                    catnipLabel.visible = false;
+                    catGraphics.frame = 0;
+                }
+            }, this);
+            catnipLabel = catnipButton.addChild(game.make.bitmapText(-100, -100, 'child', "$5, calm the cat down", 24));
+            catnipLabel.visible = false;
+
             store.addChild(cigsButton);
             store.addChild(tunaButton);
             store.addChild(prunoButton);
+            store.addChild(catnipButton);
 
             deck = getDeck();
             d3.shuffle(deck);
