@@ -90,7 +90,7 @@
         var betmax = 3;
 
         function preload() {
-            game.load.image('background', 'assets/images/cellmockup2.png');
+            game.load.image('background', 'assets/images/cellmockup3.png');
             game.load.image('cardDeck', 'assets/images/carddeck.png');
             game.load.image('blankcard', 'assets/images/blankcard.png');
             game.load.image('bettext', 'assets/images/bettext84x32.png');
@@ -128,12 +128,11 @@
             freakout = game.add.audio('freakout');
             meow = game.add.audio('meow');
 
-            wallet.elem = game.add.bitmapText(20, 560, 'child', wallet.toString(), 24);
-            betL = game.add.bitmapText(195, 560, 'child', "$" + betAmount.toFixed(2).toString(), 24);
+            wallet.elem = game.add.bitmapText(700, 20, 'child', wallet.toString(), 24);
 
-            petButton = game.add.sprite(game.world.centerX, game.world.centerY - 50);
+            petButton = game.add.sprite(game.world.centerX - 50, game.world.centerY - 50);
             petButton.anchor.set(0.5);
-            petButton.scale.setTo(0.5, 0.5);
+            petButton.scale.setTo(0.4, 0.4);
 
             righteye = petButton.addChild(game.make.sprite(-192, -131, 'eyer'));
             righteye.anchor.set(0.5);
@@ -146,15 +145,18 @@
             catGraphics = petButton.addChild(game.make.sprite(0, 0, 'catimages'));
             catGraphics.anchor.set(0.5);
 
-            betButton = game.add.sprite(240, 500, 'coinstack', 0);
+            betButton = game.add.sprite(50, 500, 'coinstack', 0);
             betButton.anchor.set(0.5);
             betButton.inputEnabled = true;
             betButton.input.useHandCursor = true;
             betButton.events.onInputDown.add(betButtonAction, this);
             betlabel = betButton.addChild(game.make.sprite(-35, 30, 'bettext'));
             betlabel.scale.setTo(.75);
+            betL = game.make.bitmapText(0, 70, 'child', "$" + betAmount.toFixed(2).toString(), 24);
+            betL.anchor.set(0.5);
+            betButton.addChild(betL);
 
-            leftCard.elem = game.add.sprite(200, 240, 'blankcard');
+            leftCard.elem = game.add.sprite(120, 400, 'blankcard');
             leftCard.elem.anchor.set(0);
             leftCard.elem.scale.set(.5);
             leftCard.elem.inputEnabled = true;
@@ -163,7 +165,7 @@
             leftCard.c = leftCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
             leftCard.elem.events.onInputDown.add(catFreakout, this);
 
-            rightCard.elem = game.add.sprite(520, 240, 'blankcard');
+            rightCard.elem = game.add.sprite(440, 400, 'blankcard');
             rightCard.elem.anchor.set(0);
             rightCard.elem.scale.set(.5);
             rightCard.elem.inputEnabled = true;
@@ -171,7 +173,7 @@
             rightCard.br = rightCard.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
             rightCard.c = rightCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
 
-            drawnCard.elem = game.add.sprite(360, 240, 'blankcard');
+            drawnCard.elem = game.add.sprite(280, 400, 'blankcard');
             drawnCard.elem.anchor.set(0);
             drawnCard.elem.scale.set(.5);
             drawnCard.elem.inputEnabled = true;
@@ -186,7 +188,7 @@
             bonusCard.br = bonusCard.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
             bonusCard.c = bonusCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
 
-            cardDeck = game.add.sprite(590, 450, 'cardDeck');
+            cardDeck = game.add.sprite(610, 450, 'cardDeck');
             cardDeck.inputEnabled = true;
             cardDeck.input.useHandCursor = true;
             cardDeck.events.onInputDown.add(deckCommand, this);
@@ -196,14 +198,14 @@
             cigsItem = game.add.sprite(660, 270, 'cigs');
             cigsItem.scale.setTo(0.6);
             cigsItem.visible = false;
-            tunaItem = game.add.sprite(80, 300, 'tuna');
+            tunaItem = game.add.sprite(30, 280, 'tuna');
             tunaItem.scale.setTo(0.6);
             tunaItem.visible = false;
-            prunoItem = game.add.sprite(400, 450, 'pruno');
-            prunoItem.scale.setTo(0.6);
+            prunoItem = game.add.sprite(550, 240, 'pruno');
+            prunoItem.scale.setTo(0.4);
             prunoItem.visible = false;
 
-            openStoreButton = game.add.bitmapText(20, 530, 'child', "cat-A-log", 24);
+            openStoreButton = game.add.bitmapText(20, 20, 'child', "cat-A-log", 24);
             openStoreButton.inputEnabled = true;
             openStoreButton.events.onInputDown.add(_ => store.visible = true, this);
 
