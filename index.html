@@ -185,6 +185,16 @@
             decklabel = cardDeck.addChild(game.make.sprite(38, 55, 'decktext', 1));
             decklabel.scale.setTo(.5);
 
+            cigsItem = game.add.sprite(660, 270, 'cigs');
+            cigsItem.scale.setTo(0.6);
+            cigsItem.visible = false;
+            tunaItem = game.add.sprite(80, 300, 'tuna');
+            tunaItem.scale.setTo(0.6);
+            tunaItem.visible = false;
+            prunoItem = game.add.sprite(400, 450, 'pruno');
+            prunoItem.scale.setTo(0.6);
+            prunoItem.visible = false;
+
             openStoreButton = game.add.bitmapText(20, 530, 'child', "Store", 24);
             openStoreButton.inputEnabled = true;
             openStoreButton.events.onInputDown.add(_ => store.visible = true, this);
@@ -313,6 +323,9 @@
         function render() {
             righteye.rotation = game.physics.arcade.angleToPointer(righteye.world) - .6;
             lefteye.rotation = game.physics.arcade.angleToPointer(lefteye.world);
+            tunaItem.visible = lowtieswin;
+            cigsItem.visible = hightieswin;
+            prunoItem.visible = betmax == 5;
         }
 
         function getDeck() {
