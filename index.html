@@ -88,7 +88,6 @@
 
             game.load.image('storeBackground', 'assets/images/cat-a-log.png');
             game.load.image('storeCloseButton', 'assets/images/close-store-button.png');
-            game.load.image('storeTunaButton', 'assets/images/tuna-button.png');
 
             game.load.bitmapFont('child', 'assets/images/ashcan.png', 'assets/images/ashcan.fnt');
 
@@ -168,6 +167,22 @@
             cardDeck.events.onInputDown.add(deckCommand, this);
             decklabel = cardDeck.addChild(game.make.sprite(38, 55, 'decktext', 1));
             decklabel.scale.setTo(.5);
+
+            openStoreButton = game.add.bitmapText(20, 530, 'child', "Store", 24);
+            openStoreButton.inputEnabled = true;
+            openStoreButton.events.onInputDown.add(() => store.visible = true, this);
+
+            store = game.add.sprite(game.world.centerX, game.world.centerY, "storeBackground");
+            store.anchor.set(0.5);
+            store.inputEnabled = true;
+            store.input.enableDrag();
+            store.visible = false;
+            storeCloseButton = game.make.sprite((store.width / 2) - 141, -1 * (store.height / 2),
+                "storeCloseButton");
+            storeCloseButton.inputEnabled = true;
+            storeCloseButton.input.priorityID = 1;
+            storeCloseButton.events.onInputDown.add(() => store.visible = false, this);
+            store.addChild(storeCloseButton);
 
             deck = getDeck();
             d3.shuffle(deck);
