@@ -104,6 +104,7 @@
             game.load.image('eyer', 'assets/images/eyer.png');
 
             game.load.image('storeBackground', 'assets/images/catalog.png');
+            game.load.image('storeForeground', 'assets/images/catalogalpha.png');
             game.load.image('storeCloseButton', 'assets/images/closebutton.png');
 
             game.load.bitmapFont('child', 'assets/images/ashcan.png', 'assets/images/ashcan.fnt');
@@ -202,7 +203,7 @@
             prunoItem.scale.setTo(0.6);
             prunoItem.visible = false;
 
-            openStoreButton = game.add.bitmapText(20, 530, 'child', "Store", 24);
+            openStoreButton = game.add.bitmapText(20, 530, 'child', "cat-A-log", 24);
             openStoreButton.inputEnabled = true;
             openStoreButton.events.onInputDown.add(_ => store.visible = true, this);
 
@@ -211,12 +212,12 @@
             store.inputEnabled = true;
             store.input.enableDrag();
             store.visible = false;
-            storeCloseButton = game.make.sprite((store.width / 2) - 141, -1 * (store.height / 2),
+
+            storeCloseButton = game.make.sprite((store.width / 2) - 80, -1 * (store.height / 2),
                 "storeCloseButton");
             storeCloseButton.inputEnabled = true;
             storeCloseButton.input.priorityID = 1;
             storeCloseButton.events.onInputDown.add(_ => store.visible = false, this);
-            store.addChild(storeCloseButton);
 
             tunaButton = game.make.sprite(-270, -180, 'tuna', 0);
             tunaButton.anchor.set(0.5);
@@ -243,7 +244,7 @@
             tunalabel = tunaButton.addChild(game.make.bitmapText(-100, 120, 'child', "$5, win low ties", 24));
             tunalabel.visible = false;
 
-            cigsButton = game.make.sprite(-270, -60, 'cigs', 0);
+            cigsButton = game.make.sprite(-270, -65, 'cigs', 0);
             cigsButton.anchor.set(0.5);
             cigsButton.scale.setTo(.3);
             cigsButton.inputEnabled = true;
@@ -313,11 +314,16 @@
             }, this);
             catnipLabel = catnipButton.addChild(game.make.bitmapText(-100, -100, 'child', "$5, calm the cat down", 24));
             catnipLabel.visible = false;
+            
+            storeForeground = game.make.sprite(0, 0, 'storeForeground');
+            storeForeground.anchor.set(0.5);
 
             store.addChild(cigsButton);
             store.addChild(tunaButton);
             store.addChild(prunoButton);
             store.addChild(catnipButton);
+            store.addChild(storeForeground);
+            store.addChild(storeCloseButton);
 
             deck = getDeck();
             d3.shuffle(deck);
