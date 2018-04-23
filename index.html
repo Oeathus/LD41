@@ -487,6 +487,8 @@
                     catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
                 } else {
                     wallet.update(-betAmount);
+                    wallet.update(-betAmount);
+                    catDlg.setText('oh the hubris');
                 }
                 gamePhase = 2;
                 deckCommand();
