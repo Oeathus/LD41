@@ -134,6 +134,10 @@
 
             game.load.audio('freakout', 'assets/audio/freakout1.mp3');
             game.load.audio('meow', 'assets/audio/meow1.mp3');
+
+            //thanks to kiddpark of freesound.org for the unmodified cash register sound
+            //https://freesound.org/people/kiddpark/sounds/201159/
+            game.load.audio('cashregister', 'assets/audio/cashregister.mp3');
         }
 
         function create() {
@@ -143,6 +147,7 @@
 
             freakout = game.add.audio('freakout');
             meow = game.add.audio('meow');
+            cashregister = game.add.audio('cashregister');
 
             wallet.elem = game.add.bitmapText(700, 20, 'child', wallet.toString(), 24);
 
@@ -277,6 +282,7 @@
             }, this);
             tunaButton.events.onInputDown.add(_ => {
                 if (wallet.value > 5) {
+                    cashregister.play();
                     wallet.value -= 5;
                     wallet.update();
                     tunaButton.inputEnabled = false;
@@ -302,6 +308,7 @@
             }, this);
             cigsButton.events.onInputDown.add(_ => {
                 if (wallet.value > 5) {
+                    cashregister.play();
                     wallet.value -= 5;
                     wallet.update();
                     cigsButton.inputEnabled = false;
@@ -325,6 +332,7 @@
             }, this);
             prunoButton.events.onInputDown.add(_ => {
                 if (wallet.value > 5) {
+                    cashregister.play();
                     wallet.value -= 5;
                     wallet.update();
                     prunoButton.inputEnabled = false;
@@ -348,6 +356,7 @@
             }, this);
             catnipButton.events.onInputDown.add(_ => {
                 if (wallet.value > 5) {
+                    cashregister.play();
                     wallet.value -= 5;
                     wallet.update();
                     catnipLabel.visible = false;
