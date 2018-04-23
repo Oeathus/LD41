@@ -117,13 +117,14 @@
             game.load.image('storeBackground', 'assets/images/catalog.png');
             game.load.image('storeForeground', 'assets/images/catalogalpha.png');
             game.load.image('storeCloseButton', 'assets/images/closebutton.png');
+            game.load.image('storeOpenButton', 'assets/images/catalogtag.png');
 
             game.load.bitmapFont('child', 'assets/images/ashcan.png', 'assets/images/ashcan.fnt');
 
             game.load.spritesheet('decktext', 'assets/images/decktext202x34.png', 202, 34, 5);
             game.load.spritesheet('cvalue', 'assets/images/cvalue60x70.png', 60, 70, 13);
             game.load.spritesheet('csuit', 'assets/images/csuits100x100.png', 100, 100, 4);
-            game.load.spritesheet('coinstack', 'assets/images/fishcoins75x55.png', 75, 55, 5);
+            game.load.spritesheet('coinstack', 'assets/images/fishcoins75x65x6.png', 75, 65, 6);
 
             game.load.spritesheet('catimages', 'assets/images/prisoncat828x620te.png', 828, 620, 6);
 
@@ -163,9 +164,9 @@
             betButton.inputEnabled = true;
             betButton.input.useHandCursor = true;
             betButton.events.onInputDown.add(betButtonAction, this);
-            betlabel = betButton.addChild(game.make.sprite(-35, 30, 'bettext'));
+            betlabel = betButton.addChild(game.make.sprite(-35, 35, 'bettext'));
             betlabel.scale.setTo(.75);
-            betL = game.make.bitmapText(0, 70, 'child', "$" + betAmount.toFixed(2).toString(), 24);
+            betL = game.make.bitmapText(0, 75, 'child', "$" + betAmount.toFixed(2).toString(), 24);
             betL.anchor.set(0.5);
             betButton.addChild(betL);
 
@@ -218,9 +219,14 @@
             prunoItem.scale.setTo(0.4);
             prunoItem.visible = false;
 
-            openStoreButton = game.add.bitmapText(20, 20, 'child', "cat-A-log", 24);
+            openStoreButton = game.add.sprite(80, 30, "storeOpenButton");
+            openStoreButton.anchor.set(0.5);
+            openStoreButton.scale.setTo(0.5);
+            openStoreText = game.make.bitmapText(0, 0, 'child', "cat-A-log", 48);
+            openStoreText.anchor.set(0.5);
             openStoreButton.inputEnabled = true;
             openStoreButton.events.onInputDown.add(_ => store.visible = true, this);
+            openStoreButton.addChild(openStoreText);
 
             store = game.add.sprite(game.world.centerX, game.world.centerY, "storeBackground");
             store.anchor.set(0.5);
