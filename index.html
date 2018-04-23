@@ -89,6 +89,17 @@
         var hightieswin = false;
         var betmax = 3;
 
+        var startgameDlg = ["think you'll draw between the two cards?", "aces high, dueces low, its simple", "ties go to me, unless you got something i'd like", "high and low, thread the needle", "bet something or nothing, lets draw", "you think the third will be between these two", "aces are high, twos are twos, the money is in between", "i got a gambling addiction, but i also got connections", "you take care of me? i'll take care of you"];
+        var shuffleDlg = ["shuffling hurts my paws, you see", "you think i will shuffle all day?", "52 cards and you want more?", "play faster if you want me to play nice"];
+        var skippedwonDlg = ["you should've taken the bet, you jerk", "that's what you get, you coward", "you are luckier than you thought", "see, you gotta pay to play", "i'll get bored shuffling all day, better play"];
+        var skippedlostDlg = ["you got a good eye, i'd know", "that means next is a winner", "lets get to the good hands", "almost, almost", "don't make to have to shuffle... i hate to shuffle"];
+        var wonbetDlg = ["alright, don't get cocky", "you make enough, and you can start spoiling me", "alright, fair is fair", "you ain't peeking at the deck are you?", "here, buy yourself a new haircut", "want higher stakes? find me a drink", "im shaking to raise the stakes"];
+        var doubledownDlg = ["yeah, try your luck again!", "double down, i dare you", "fine then, double or nothing?"];
+        var lostbestDlg = ["i'll be taking that", "aw, you're luck'll turn up", "you're getting cocky", "don't you ever want to get out of here", "buy an item if your having a tough time", "too many shuffles and i'll press your luck", "you gotta draw between the others"];
+        var lostlowtie = ["low ties go to me, 'less you got something to eat", "good, i could use some eating money"];
+        var losthightie = ["high tie to the dealer. y'aint got a smoke do you?", "high tie is all mine, you'll get better luck"];
+        var wonbonus = ["you really are having a streak", "let's see how your luck improves", "thats why this is the biggest game in the cell"];
+
         function preload() {
             game.load.image('background', 'assets/images/cellmockup2.png');
             game.load.image('cardDeck', 'assets/images/carddeck.png');
@@ -129,6 +140,9 @@
 
             wallet.elem = game.add.bitmapText(20, 560, 'child', wallet.toString(), 24);
             betL = game.add.bitmapText(195, 560, 'child', "$" + betAmount.toFixed(2).toString(), 24);
+
+            catDlg = game.add.bitmapText(280, 20, 'child', startgameDlg[Math.floor(Math.random() * startgameDlg.length)], 24);
+            catDlg.maxWidth = 250;
 
             petButton = game.add.sprite(game.world.centerX, game.world.centerY - 50);
             petButton.anchor.set(0.5);
@@ -431,11 +445,12 @@
                 betlabel.visible = false;
                 if (betAmount != 0) {
                     if (drawnCard.val.value > myMin(leftCard.val.value, rightCard.val.value) && drawnCard.val.value < myMax(leftCard.val.value, rightCard.val.value)) {
-                        console.log('win');
+                        catDlg.setText(wonbetDlg[Math.floor(Math.random() * wonbetDlg.length)]);
                         wallet.value += betAmount;
                         wallet.update();
                         if (bonusrounds) {//bonusrounds param
                             gamePhase = 1;//BONUS ROUND
+                            catDlg.setText(doubledownDlg[Math.floor(Math.random() * doubledownDlg.length)]);
                             return;
                         } else {
                             gamePhase = 2;
@@ -443,6 +458,7 @@
                     } else {
                         wallet.value -= betAmount;
                         wallet.update();
+                        catDlg.setText(lostbestDlg[Math.floor(Math.random() * lostbestDlg.length)]);
                         gamePhase = 2;
                     }
                 } else {
@@ -453,6 +469,7 @@
                 bonusCard.update(deck.pop());
                 if (bonusCard.val.value > myMin(leftCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(leftCard.val.value, drawnCard.val.value)) {
                     wallet.update(betAmount);
+                    catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
                 }
                 gamePhase = 2;
             }
@@ -466,6 +483,7 @@
                         setTimeout(catFreakout, 1000);
                     }
                     decklabel.frame = 4;
+                    catDlg.setText(shuffleDlg[Math.floor(Math.random() * shuffleDlg.length)]);
                 } else {
                     decklabel.frame = 2;
                 }
@@ -473,6 +491,7 @@
                 return;
             }
             if (gamePhase == 3) {
+                catDlg.setText(startgameDlg[Math.floor(Math.random() * startgameDlg.length)]);
                 discardPile.push(leftCard.val);
                 discardPile.push(rightCard.val);
                 discardPile.push(drawnCard.val);
