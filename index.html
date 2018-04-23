@@ -40,6 +40,19 @@
         function Card(value, suit) {
             this.value = value;
             this.suit = suit;
+            this.compare = function (otherCard = null) {
+                if (otherCard !== null) {
+                    if (this.value > otherCard.value) {
+                        return 1;
+                    } else if (this.value < otherCard.value) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                } else {
+                    return null;
+                }
+            }
         }
 
         function Wallet(startingAmount = 20.00) {
@@ -82,6 +95,10 @@
             game.load.image('cardDeck', 'assets/images/carddeck.png');
             game.load.image('blankcard', 'assets/images/blankcard.png');
             game.load.image('bettext', 'assets/images/bettext84x32.png');
+            
+            game.load.image('tuna', 'assets/images/tuna.png');
+            game.load.image('cigs', 'assets/images/cigs.png');
+
 
             game.load.image('eyel', 'assets/images/eyel.png');
             game.load.image('eyer', 'assets/images/eyer.png');
@@ -119,7 +136,55 @@
             catGraphics = petButton.addChild(game.make.sprite(0, 0, 'catimages'));
             catGraphics.anchor.set(0.5);
 
-            petButton.bringToTop();
+            tunaButton = game.add.sprite(100, 380, 'tuna', 0);
+            tunaButton.anchor.set(0.5);
+            tunaButton.scale.setTo(.7);
+            tunaButton.inputEnabled = true;
+            tunaButton.input.useHandCursor = true;
+            tunaButton.events.onInputOver.add(_ => {
+                if(lowtieswin == false){
+                    tunalabel.visible = true;
+                }
+            }, this);
+            tunaButton.events.onInputOut.add(_ => {
+                tunalabel.visible = false;
+            }, this);
+            tunaButton.events.onInputDown.add(_ => {
+                if(wallet.value > 5){
+                    wallet.value -= 5;
+                    wallet.update();
+                    tunaButton.inputEnabled = false;
+                    tunalabel.visible = false;
+                    lowtieswin = true;
+                }
+            }, this);
+            tunalabel = tunaButton.addChild(game.make.bitmapText(-100, 120, 'child', "$5, win low ties", 24));
+            tunalabel. visible = false;
+
+            cigsButton = game.add.sprite(730, 350, 'cigs', 0);
+            cigsButton.anchor.set(0.5);
+            cigsButton.scale.setTo(.7);
+            cigsButton.inputEnabled = true;
+            cigsButton.input.useHandCursor = true;
+            cigsButton.events.onInputOver.add(_ => {
+                if(hightieswin == false){
+                    cigslabel.visible = true;
+                }
+            }, this);
+            cigsButton.events.onInputOut.add(_ => {
+                cigslabel.visible = false;
+            }, this);
+            cigsButton.events.onInputDown.add(_ => {
+                if(wallet.value > 5){
+                    wallet.value -= 5;
+                    wallet.update();
+                    cigsButton.inputEnabled = false;
+                    cigslabel.visible = false;
+                    hightieswin = true;
+                }
+            }, this);
+            cigslabel = cigsButton.addChild(game.make.bitmapText(-100, -195, 'child', "$5, win high ties", 24));
+            cigslabel. visible = false;
 
             betButton = game.add.sprite(240, 500, 'coinstack', 0);
             betButton.anchor.set(0.5);
@@ -259,8 +324,6 @@
                     d3.shuffle(discardPile);
                     deck = deck.concat(discardPile);
                     discardPile = [];
-                    wallet.value -= catGraphics.frame;
-                    wallet.update();
                     catGraphics.frame++;
                     decklabel.frame = 4;
                 } else {
