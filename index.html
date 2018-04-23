@@ -115,7 +115,7 @@
             game.load.spritesheet('decktext', 'assets/images/decktext202x34.png', 202, 34, 5);
             game.load.spritesheet('cvalue', 'assets/images/cvalue60x70.png', 60, 70, 13);
             game.load.spritesheet('csuit', 'assets/images/csuits100x100.png', 100, 100, 4);
-            game.load.spritesheet('coinstack', 'assets/images/fishcoins75x55.png', 75, 55, 4);
+            game.load.spritesheet('coinstack', 'assets/images/fishcoins75x55.png', 75, 55, 5);
         }
 
         function create() {
@@ -153,12 +153,11 @@
 
             catattackL = game.add.bitmapText(20, 200, 'child', 'Bonus: ' + catattack.toFixed(2), 24);
 
-            betButton = game.add.sprite(240, 500, 'coinstack');
-            betButton.frame = 0;
+            betButton = game.add.sprite(240, 500, 'coinstack', 1);
             betButton.anchor.set(0.5);
             betButton.inputEnabled = true;
             betButton.events.onInputDown.add(betButtonAction, this);
-            betlabel = betButton.addChild(game.make.sprite(-25, 25, 'bettext'));
+            betlabel = betButton.addChild(game.make.sprite(-35, 30, 'bettext'));
             betlabel.scale.setTo(.75);
 
             dealersCard.elem = game.add.sprite(200, 240, 'blankcard');
