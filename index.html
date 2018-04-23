@@ -84,9 +84,13 @@
 
         var gamePhase = 0;
 
+        var bonusrounds = false;
+        var lowtieswin = false;
+        var hightieswin = false;
+        var betmax = 3;
+
         function preload() {
             game.load.image('background', 'assets/images/cellmockup2.png');
-            game.load.image('pcat_neutral', 'assets/images/tempcat.png');
             game.load.image('betButton', 'assets/images/betButton.png');
             game.load.image('cardDeck', 'assets/images/carddeck.png');
             game.load.image('blankcard', 'assets/images/blankcard.png');
@@ -101,6 +105,8 @@
             game.load.spritesheet('cvalue', 'assets/images/cvalue60x70.png', 60, 70, 13);
             game.load.spritesheet('csuit', 'assets/images/csuits100x100.png', 100, 100, 4);
             game.load.spritesheet('coinstack', 'assets/images/fishcoins75x55.png', 75, 55, 5);
+            
+            game.load.spritesheet('catimages', 'assets/images/prisoncat290x217te.png', 828, 620, 6);
         }
 
         function create() {
@@ -111,21 +117,22 @@
             wallet.elem = game.add.bitmapText(20, 540, 'child', wallet.toString(), 24);
             betL = game.add.bitmapText(20, 566, 'child', "Bet: $" + betAmount.toFixed(2).toString(), 24);
 
-            righteye = game.add.sprite(255, 145, 'eyer');
-            righteye.anchor.set(0.5);
-            righteye.events.onInputDown.add(() => --bored, this);
-            righteye.scale.setTo(0.55, 0.55);
-
-            lefteye = game.add.sprite(174, 124, 'eyel');
-            lefteye.anchor.set(0.5);
-            lefteye.scale.setTo(0.6, 0.6);
-
-            petButton = game.add.sprite(game.world.centerX, game.world.centerY - 60, 'pcat_neutral');
+            petButton = game.add.sprite(game.world.centerX, game.world.centerY - 50);
             petButton.anchor.set(0.5);
-            petButton.inputEnabled = true;
-            petButton.input.useHandCursor = true;
-            petButton.events.onInputDown.add(() => --bored, this);
-            petButton.scale.setTo(0.75, 0.75);
+            petButton.scale.setTo(0.78, 0.78);
+
+            righteye = petButton.addChild(game.make.sprite(-192, -131, 'eyer'));
+            righteye.anchor.set(0.5);
+            righteye.scale.setTo(.7);
+
+            lefteye = petButton.addChild(game.make.sprite(-300, -158, 'eyel'));
+            lefteye.anchor.set(0.5);
+            lefteye.scale.setTo(1, 1);
+
+            catGraphics = petButton.addChild(game.make.sprite(0, 0, 'catimages'));
+            catGraphics.anchor.set(0.5);
+
+            petButton.bringToTop();
 
             betButton = game.add.sprite(240, 500, 'coinstack', 0);
             betButton.anchor.set(0.5);
@@ -160,7 +167,7 @@
             drawnCard.br = drawnCard.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
             drawnCard.c = drawnCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
 
-            bonusCard.elem = game.add.sprite(390, 270, 'blankcard');
+            bonusCard.elem = game.add.sprite(270, 280, 'blankcard');
             bonusCard.elem.anchor.set(0);
             bonusCard.elem.scale.set(.5);
             bonusCard.tl = bonusCard.elem.addChild(game.make.sprite(10, 10, 'cvalue'));
@@ -184,8 +191,8 @@
         }
 
         function render() {
-            righteye.rotation = game.physics.arcade.angleToPointer(righteye) - .6;
-            lefteye.rotation = game.physics.arcade.angleToPointer(lefteye);
+            righteye.rotation = game.physics.arcade.angleToPointer(righteye.world) - .6;
+            lefteye.rotation = game.physics.arcade.angleToPointer(lefteye.world);
         }
 
         function getDeck() {
@@ -203,7 +210,7 @@
             if (betAmount == wallet.value) {
                 betAmount = 0;
             } else {
-                betAmount = betAmount >= 3 ? 0 : betAmount + 1;
+                betAmount = betAmount >= betmax ? 0 : betAmount + 1;
             }
             if (betAmount > wallet.value) {
                 betAmount = wallet.value;
@@ -212,22 +219,41 @@
             betL.setText("Bet: $" + betAmount.toFixed(2).toString());
         }
 
+        function myMin(x ,y){
+            if(lowtieswin){
+                return Math.min(x, y)-1;
+            } else {
+                return Math.min(x,y);
+            }
+        }
+
+        function myMax(x ,y){
+            if(hightieswin){
+                return Math.max(x, y)+1;
+            } else {
+                return Math.max(x,y);
+            }
+        }
+
         function deckCommand() {
             if (gamePhase == 0) {//FIRST DRAW
                 drawnCard.update(deck.pop());
                 betButton.inputEnabled = false;
                 if (betAmount != 0) {
-                    if (drawnCard.val.value > Math.min(leftCard.val.value, rightCard.val.value) && drawnCard.val.value < Math.max(leftCard.val.value, rightCard.val.value)) {
+                    if (drawnCard.val.value > myMin(leftCard.val.value, rightCard.val.value) && drawnCard.val.value < myMax(leftCard.val.value, rightCard.val.value)) {
                         console.log('win');
                         wallet.value += betAmount;
                         wallet.update();
+                        if(bonusrounds){//bonusrounds param
                         gamePhase = 1;//BONUS ROUND
                         return;
+                        } else{
+                            gamePhase = 2;
+                        }
                     } else {
                         wallet.value -= betAmount;
                         wallet.update();
                         gamePhase = 2;
-                        decklabel.frame = 2;
                     }
                 } else{
                     gamePhase = 2;
@@ -235,7 +261,7 @@
             }
             if (gamePhase == 1) {//BONUS ROUND
                 bonusCard.update(deck.pop());
-                if (bonusCard.val.value > Math.min(leftCard.val.value, drawnCard.val.value) && bonusCard.val.value < Math.max(leftCard.val.value, drawnCard.val.value)) {
+                if (bonusCard.val.value > myMin(leftCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(leftCard.val.value, drawnCard.val.value)) {
                     wallet.update(betAmount);
                 }
                 gamePhase = 2;
@@ -245,6 +271,7 @@
                     d3.shuffle(discardPile);
                     deck = deck.concat(discardPile);
                     discardPile = [];
+                    catGraphics.frame++;
                     decklabel.frame = 4;
                 } else {
                     decklabel.frame = 2;
@@ -270,5 +297,4 @@
         }
     </script>
 </body>
-
 </html>
