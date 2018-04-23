@@ -103,7 +103,7 @@
             game.load.image('eyel', 'assets/images/eyel.png');
             game.load.image('eyer', 'assets/images/eyer.png');
 
-            game.load.image('storeBackground', 'assets/images/cat-a-log.png');
+            game.load.image('storeBackground', 'assets/images/catalog.png');
             game.load.image('storeCloseButton', 'assets/images/closebutton.png');
 
             game.load.bitmapFont('child', 'assets/images/ashcan.png', 'assets/images/ashcan.fnt');
@@ -217,9 +217,9 @@
             storeCloseButton.events.onInputDown.add(_ => store.visible = false, this);
             store.addChild(storeCloseButton);
 
-            tunaButton = game.make.sprite(-290, -125, 'tuna', 0);
+            tunaButton = game.make.sprite(-270, -180, 'tuna', 0);
             tunaButton.anchor.set(0.5);
-            tunaButton.scale.setTo(.6);
+            tunaButton.scale.setTo(.4);
             tunaButton.inputEnabled = true;
             tunaButton.input.useHandCursor = true;
             tunaButton.events.onInputOver.add(_ => {
@@ -242,9 +242,9 @@
             tunalabel = tunaButton.addChild(game.make.bitmapText(-100, 120, 'child', "$5, win low ties", 24));
             tunalabel.visible = false;
 
-            cigsButton = game.make.sprite(-290, 64, 'cigs', 0);
+            cigsButton = game.make.sprite(-270, -60, 'cigs', 0);
             cigsButton.anchor.set(0.5);
-            cigsButton.scale.setTo(.6);
+            cigsButton.scale.setTo(.3);
             cigsButton.inputEnabled = true;
             cigsButton.input.useHandCursor = true;
             cigsButton.events.onInputOver.add(_ => {
@@ -267,9 +267,9 @@
             cigslabel = cigsButton.addChild(game.make.bitmapText(-100, -195, 'child', "$5, win high ties", 24));
             cigslabel.visible = false;
 
-            prunoButton = game.make.sprite(-110, -125, 'pruno', 0);
+            prunoButton = game.make.sprite(-270, 50, 'pruno', 0);
             prunoButton.anchor.set(0.5);
-            prunoButton.scale.setTo(.6);
+            prunoButton.scale.setTo(.35);
             prunoButton.inputEnabled = true;
             prunoButton.input.useHandCursor = true;
             prunoButton.events.onInputOver.add(_ => {
@@ -290,9 +290,9 @@
             prunoLabel = prunoButton.addChild(game.make.bitmapText(-100, -155, 'child', "$5, increase max bet", 24));
             prunoLabel.visible = false;
 
-            catnipButton = game.make.sprite(-120, 30, 'catnip', 0);
+            catnipButton = game.make.sprite(-270, 170, 'catnip', 0);
             catnipButton.anchor.set(0.5);
-            catnipButton.scale.setTo(.6);
+            catnipButton.scale.setTo(.5);
             catnipButton.inputEnabled = true;
             catnipButton.input.useHandCursor = true;
             catnipButton.events.onInputOver.add(_ => {
