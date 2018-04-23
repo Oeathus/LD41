@@ -392,9 +392,9 @@
                     d3.shuffle(discardPile);
                     deck = deck.concat(discardPile);
                     discardPile = [];
-                    catGraphics.frame++;
-                    wallet.value -= frame;
-                    wallet.update();
+                    if (catGraphics.frame < 4) {
+                        catGraphics.frame++;
+                    }
                     decklabel.frame = 4;
                 } else {
                     decklabel.frame = 2;
