@@ -101,12 +101,12 @@
             game.stage.backgroundColor = '#ffffff';
             background = game.add.tileSprite(0, 0, 800, 600, 'background');
 
-            wallet.elem = game.add.bitmapText(20, 540, 'child', wallet.toString(), 24);
-            betL = game.add.bitmapText(20, 566, 'child', "Bet: $" + betAmount.toFixed(2).toString(), 24);
+            wallet.elem = game.add.bitmapText(20, 560, 'child', wallet.toString(), 24);
+            betL = game.add.bitmapText(195, 560, 'child', "$" + betAmount.toFixed(2).toString(), 24);
 
             petButton = game.add.sprite(game.world.centerX, game.world.centerY - 50);
             petButton.anchor.set(0.5);
-            petButton.scale.setTo(0.78, 0.78);
+            petButton.scale.setTo(0.5, 0.5);
 
             righteye = petButton.addChild(game.make.sprite(-192, -131, 'eyer'));
             righteye.anchor.set(0.5);
@@ -118,8 +118,6 @@
 
             catGraphics = petButton.addChild(game.make.sprite(0, 0, 'catimages'));
             catGraphics.anchor.set(0.5);
-
-            petButton.bringToTop();
 
             betButton = game.add.sprite(240, 500, 'coinstack', 0);
             betButton.anchor.set(0.5);
@@ -141,7 +139,6 @@
             rightCard.elem.anchor.set(0);
             rightCard.elem.scale.set(.5);
             rightCard.elem.inputEnabled = true;
-            //rightCard.elem.events.onInputDown.add(drawSecondCard, this);
             rightCard.tl = rightCard.elem.addChild(game.make.sprite(10, 10, 'cvalue'));
             rightCard.br = rightCard.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
             rightCard.c = rightCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
@@ -203,7 +200,7 @@
                 betAmount = wallet.value;
             }
             betButton.frame = Math.round(betAmount);
-            betL.setText("Bet: $" + betAmount.toFixed(2).toString());
+            betL.setText("$" + betAmount.toFixed(2).toString());
         }
 
         function myMin(x, y) {
