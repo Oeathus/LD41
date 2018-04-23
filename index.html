@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title>Phaser - Making your first game, part 8</title>
+    <title>Prison Cat</title>
     <script src="//cdn.jsdelivr.net/phaser/2.6.2/phaser.min.js"></script>
     <script src="//d3js.org/d3.v5.min.js"></script>
     <style type="text/css">
@@ -101,7 +101,7 @@
         var wonbonus = ["you really are having a streak", "let's see how your luck improves", "thats why this is the biggest game in the cell"];
 
         function preload() {
-            game.load.image('background', 'assets/images/cellmockup3.png');
+            game.load.image('background', 'assets/images/cellmockup4.png');
             game.load.image('cardDeck', 'assets/images/carddeck.png');
             game.load.image('blankcard', 'assets/images/blankcard.png');
             game.load.image('bettext', 'assets/images/bettext84x32.png');
@@ -116,6 +116,7 @@
 
             game.load.image('eyel', 'assets/images/eyel.png');
             game.load.image('eyer', 'assets/images/eyer.png');
+            game.load.image('speechBubble', 'assets/images/speechbubble.png');
 
             game.load.image('storeBackground', 'assets/images/catalog.png');
             game.load.image('storeForeground', 'assets/images/catalogalpha.png');
@@ -145,9 +146,15 @@
 
             wallet.elem = game.add.bitmapText(700, 20, 'child', wallet.toString(), 24);
 
-            catDlg = game.add.bitmapText(280, 20, 'child', startgameDlg[Math.floor(Math.random() * startgameDlg.length)], 24);
+            catSpeechBubble = game.add.sprite(380, 100, 'speechBubble');
+            catSpeechBubble.anchor.set(0.5);
+            catSpeechBubble.scale.setTo(0.5);
+
+            catDlg = game.add.bitmapText(385,95, 'child', startgameDlg[Math.floor(Math.random() * startgameDlg.length)], 24);
+            catDlg.anchor.set(0.5);
             catDlg.maxWidth = 250;
-            petButton = game.add.sprite(game.world.centerX - 50, game.world.centerY - 50);
+
+            petButton = game.add.sprite(game.world.centerX - 60, game.world.centerY);
             petButton.anchor.set(0.5);
             petButton.scale.setTo(0.4, 0.4);
 
@@ -277,7 +284,7 @@
                     lowtieswin = true;
                 }
             }, this);
-            tunalabel = tunaButton.addChild(game.make.bitmapText(-100, 120, 'child', "$5, win low ties", 24));
+            tunalabel = game.make.bitmapText(20, -200, 'child', "$5, win low ties", 24);
             tunalabel.visible = false;
 
             cigsButton = game.make.sprite(-270, -65, 'cigs', 0);
@@ -302,7 +309,7 @@
                     hightieswin = true;
                 }
             }, this);
-            cigslabel = cigsButton.addChild(game.make.bitmapText(-100, -195, 'child', "$5, win high ties", 24));
+            cigslabel = game.make.bitmapText(20, -110, 'child', "$5, win high ties", 24);
             cigslabel.visible = false;
 
             prunoButton = game.make.sprite(-270, 50, 'pruno', 0);
@@ -325,7 +332,7 @@
                     betmax = 5;
                 }
             }, this);
-            prunoLabel = prunoButton.addChild(game.make.bitmapText(-100, -155, 'child', "$5, increase max bet", 24));
+            prunoLabel = game.make.bitmapText(20, 20, 'child', "$5, increase max bet", 24);
             prunoLabel.visible = false;
 
             catnipButton = game.make.sprite(-270, 170, 'catnip', 0);
@@ -348,7 +355,7 @@
                     catGraphics.frame = 0;
                 }
             }, this);
-            catnipLabel = catnipButton.addChild(game.make.bitmapText(-100, -100, 'child', "$5, calm the cat down", 24));
+            catnipLabel = game.make.bitmapText(20, 140, 'child', "$5, calm the cat down", 24);
             catnipLabel.visible = false;
             
             storeForeground = game.make.sprite(0, 0, 'storeForeground');
@@ -360,6 +367,10 @@
             store.addChild(catnipButton);
             store.addChild(storeForeground);
             store.addChild(storeCloseButton);
+            store.addChild(tunalabel);
+            store.addChild(cigslabel);
+            store.addChild(prunoLabel);
+            store.addChild(catnipLabel);
 
             deck = getDeck();
             d3.shuffle(deck);
