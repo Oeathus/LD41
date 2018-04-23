@@ -145,14 +145,13 @@
 
             catSpeechBubble = game.add.sprite(380, 100, 'speechBubble');
             catSpeechBubble.anchor.set(0.5);
-            catSpeechBubble.scale.setTo(0.5, 0.4);
+            catSpeechBubble.scale.setTo(0.5);
 
-            catDlg = game.make.bitmapText(0,0, 'child', startgameDlg[Math.floor(Math.random() * startgameDlg.length)], 36);
+            catDlg = game.add.bitmapText(385,95, 'child', startgameDlg[Math.floor(Math.random() * startgameDlg.length)], 24);
             catDlg.anchor.set(0.5);
-            catDlg.maxWidth = 500;
-            catSpeechBubble.addChild(catDlg);
+            catDlg.maxWidth = 250;
 
-            petButton = game.add.sprite(game.world.centerX - 70, game.world.centerY - 20);
+            petButton = game.add.sprite(game.world.centerX - 60, game.world.centerY);
             petButton.anchor.set(0.5);
             petButton.scale.setTo(0.4, 0.4);
 
