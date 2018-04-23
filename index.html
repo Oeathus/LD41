@@ -80,7 +80,7 @@
         let yourCard2 = new CardLink();
         let bonusCard = new CardLink();
         let wallet = new Wallet();
-        let betAmount = 1;
+        let betAmount = 0;
 
         var catnip = 0;
         var cigs = 0;
@@ -153,7 +153,7 @@
 
             catattackL = game.add.bitmapText(20, 200, 'child', 'Bonus: ' + catattack.toFixed(2), 24);
 
-            betButton = game.add.sprite(240, 500, 'coinstack', 1);
+            betButton = game.add.sprite(240, 500, 'coinstack', 0);
             betButton.anchor.set(0.5);
             betButton.inputEnabled = true;
             betButton.events.onInputDown.add(betButtonAction, this);
@@ -389,9 +389,9 @@
 
         function betButtonAction() {
             if (betAmount == wallet.value) {
-                betAmount = 1;
+                betAmount = 0;
             } else {
-                betAmount = betAmount >= 3 ? 1 : betAmount + 1;
+                betAmount = betAmount >= 3 ? 0 : betAmount + 1;
             }
             if (betAmount > wallet.value) {
                 betAmount = wallet.value;
