@@ -94,7 +94,7 @@
             game.load.image('cardDeck', 'assets/images/carddeck.png');
             game.load.image('blankcard', 'assets/images/blankcard.png');
             game.load.image('bettext', 'assets/images/bettext84x32.png');
-            
+
             game.load.image('tuna', 'assets/images/tuna.png');
             game.load.image('cigs', 'assets/images/cigs.png');
 
@@ -137,56 +137,6 @@
 
             catGraphics = petButton.addChild(game.make.sprite(0, 0, 'catimages'));
             catGraphics.anchor.set(0.5);
-
-            tunaButton = game.add.sprite(100, 380, 'tuna', 0);
-            tunaButton.anchor.set(0.5);
-            tunaButton.scale.setTo(.7);
-            tunaButton.inputEnabled = true;
-            tunaButton.input.useHandCursor = true;
-            tunaButton.events.onInputOver.add(_ => {
-                if(lowtieswin == false){
-                    tunalabel.visible = true;
-                }
-            }, this);
-            tunaButton.events.onInputOut.add(_ => {
-                tunalabel.visible = false;
-            }, this);
-            tunaButton.events.onInputDown.add(_ => {
-                if(wallet.value > 5){
-                    wallet.value -= 5;
-                    wallet.update();
-                    tunaButton.inputEnabled = false;
-                    tunalabel.visible = false;
-                    lowtieswin = true;
-                }
-            }, this);
-            tunalabel = tunaButton.addChild(game.make.bitmapText(-100, 120, 'child', "$5, win low ties", 24));
-            tunalabel. visible = false;
-
-            cigsButton = game.add.sprite(730, 350, 'cigs', 0);
-            cigsButton.anchor.set(0.5);
-            cigsButton.scale.setTo(.7);
-            cigsButton.inputEnabled = true;
-            cigsButton.input.useHandCursor = true;
-            cigsButton.events.onInputOver.add(_ => {
-                if(hightieswin == false){
-                    cigslabel.visible = true;
-                }
-            }, this);
-            cigsButton.events.onInputOut.add(_ => {
-                cigslabel.visible = false;
-            }, this);
-            cigsButton.events.onInputDown.add(_ => {
-                if(wallet.value > 5){
-                    wallet.value -= 5;
-                    wallet.update();
-                    cigsButton.inputEnabled = false;
-                    cigslabel.visible = false;
-                    hightieswin = true;
-                }
-            }, this);
-            cigslabel = cigsButton.addChild(game.make.bitmapText(-100, -195, 'child', "$5, win high ties", 24));
-            cigslabel. visible = false;
 
             betButton = game.add.sprite(240, 500, 'coinstack', 0);
             betButton.anchor.set(0.5);
@@ -236,7 +186,7 @@
 
             openStoreButton = game.add.bitmapText(20, 530, 'child', "Store", 24);
             openStoreButton.inputEnabled = true;
-            openStoreButton.events.onInputDown.add(() => store.visible = true, this);
+            openStoreButton.events.onInputDown.add(_ => store.visible = true, this);
 
             store = game.add.sprite(game.world.centerX, game.world.centerY, "storeBackground");
             store.anchor.set(0.5);
@@ -247,8 +197,61 @@
                 "storeCloseButton");
             storeCloseButton.inputEnabled = true;
             storeCloseButton.input.priorityID = 1;
-            storeCloseButton.events.onInputDown.add(() => store.visible = false, this);
+            storeCloseButton.events.onInputDown.add(_ => store.visible = false, this);
             store.addChild(storeCloseButton);
+
+            tunaButton = game.make.sprite(-290, -125, 'tuna', 0);
+            tunaButton.anchor.set(0.5);
+            tunaButton.scale.setTo(.6);
+            tunaButton.inputEnabled = true;
+            tunaButton.input.useHandCursor = true;
+            tunaButton.events.onInputOver.add(_ => {
+                if (lowtieswin == false) {
+                    tunalabel.visible = true;
+                }
+            }, this);
+            tunaButton.events.onInputOut.add(_ => {
+                tunalabel.visible = false;
+            }, this);
+            tunaButton.events.onInputDown.add(_ => {
+                if (wallet.value > 5) {
+                    wallet.value -= 5;
+                    wallet.update();
+                    tunaButton.inputEnabled = false;
+                    tunalabel.visible = false;
+                    lowtieswin = true;
+                }
+            }, this);
+            tunalabel = tunaButton.addChild(game.make.bitmapText(-100, 120, 'child', "$5, win low ties", 24));
+            tunalabel.visible = false;
+
+            cigsButton = game.make.sprite(-290, 64, 'cigs', 0);
+            cigsButton.anchor.set(0.5);
+            cigsButton.scale.setTo(.6);
+            cigsButton.inputEnabled = true;
+            cigsButton.input.useHandCursor = true;
+            cigsButton.events.onInputOver.add(_ => {
+                if (hightieswin == false) {
+                    cigslabel.visible = true;
+                }
+            }, this);
+            cigsButton.events.onInputOut.add(_ => {
+                cigslabel.visible = false;
+            }, this);
+            cigsButton.events.onInputDown.add(_ => {
+                if (wallet.value > 5) {
+                    wallet.value -= 5;
+                    wallet.update();
+                    cigsButton.inputEnabled = false;
+                    cigslabel.visible = false;
+                    hightieswin = true;
+                }
+            }, this);
+            cigslabel = cigsButton.addChild(game.make.bitmapText(-100, -195, 'child', "$5, win high ties", 24));
+            cigslabel.visible = false;
+
+            store.addChild(cigsButton);
+            store.addChild(tunaButton);
 
             deck = getDeck();
             d3.shuffle(deck);
