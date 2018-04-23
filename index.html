@@ -269,7 +269,7 @@
                     lowtieswin = true;
                 }
             }, this);
-            tunalabel = tunaButton.addChild(game.make.bitmapText(-100, 120, 'child', "$5, win low ties", 24));
+            tunalabel = game.make.bitmapText(20, -200, 'child', "$5, win low ties", 24);
             tunalabel.visible = false;
 
             cigsButton = game.make.sprite(-270, -65, 'cigs', 0);
@@ -294,7 +294,7 @@
                     hightieswin = true;
                 }
             }, this);
-            cigslabel = cigsButton.addChild(game.make.bitmapText(-100, -195, 'child', "$5, win high ties", 24));
+            cigslabel = game.make.bitmapText(20, -110, 'child', "$5, win high ties", 24);
             cigslabel.visible = false;
 
             prunoButton = game.make.sprite(-270, 50, 'pruno', 0);
@@ -317,7 +317,7 @@
                     betmax = 5;
                 }
             }, this);
-            prunoLabel = prunoButton.addChild(game.make.bitmapText(-100, -155, 'child', "$5, increase max bet", 24));
+            prunoLabel = game.make.bitmapText(20, 20, 'child', "$5, increase max bet", 24);
             prunoLabel.visible = false;
 
             catnipButton = game.make.sprite(-270, 170, 'catnip', 0);
@@ -340,7 +340,7 @@
                     catGraphics.frame = 0;
                 }
             }, this);
-            catnipLabel = catnipButton.addChild(game.make.bitmapText(-100, -100, 'child', "$5, calm the cat down", 24));
+            catnipLabel = game.make.bitmapText(20, 140, 'child', "$5, calm the cat down", 24);
             catnipLabel.visible = false;
             
             storeForeground = game.make.sprite(0, 0, 'storeForeground');
@@ -352,6 +352,10 @@
             store.addChild(catnipButton);
             store.addChild(storeForeground);
             store.addChild(storeCloseButton);
+            store.addChild(tunalabel);
+            store.addChild(cigslabel);
+            store.addChild(prunoLabel);
+            store.addChild(catnipLabel);
 
             deck = getDeck();
             d3.shuffle(deck);
