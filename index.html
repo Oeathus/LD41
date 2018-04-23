@@ -40,19 +40,6 @@
         function Card(value, suit) {
             this.value = value;
             this.suit = suit;
-            this.compare = function (otherCard = null) {
-                if (otherCard !== null) {
-                    if (this.value > otherCard.value) {
-                        return 1;
-                    } else if (this.value < otherCard.value) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                } else {
-                    return null;
-                }
-            }
         }
 
         function Wallet(startingAmount = 20.00) {
@@ -272,6 +259,8 @@
                     d3.shuffle(discardPile);
                     deck = deck.concat(discardPile);
                     discardPile = [];
+                    wallet.value -= catGraphics.frame;
+                    wallet.update();
                     catGraphics.frame++;
                     decklabel.frame = 4;
                 } else {
