@@ -114,12 +114,18 @@
             game.load.spritesheet('coinstack', 'assets/images/fishcoins75x55.png', 75, 55, 5);
 
             game.load.spritesheet('catimages', 'assets/images/prisoncat828x620te.png', 828, 620, 6);
+            
+            game.load.audio('freakout', 'assets/audio/freakout1.mp3');
+            game.load.audio('meow', 'assets/audio/meow1.mp3');
         }
 
         function create() {
             game.physics.startSystem(Phaser.Physics.ARCADE);
             game.stage.backgroundColor = '#ffffff';
             background = game.add.tileSprite(0, 0, 800, 600, 'background');
+
+            freakout = game.add.audio('freakout');
+            meow = game.add.audio('meow');
 
             wallet.elem = game.add.bitmapText(20, 560, 'child', wallet.toString(), 24);
             betL = game.add.bitmapText(195, 560, 'child', "$" + betAmount.toFixed(2).toString(), 24);
@@ -300,6 +306,7 @@
                     wallet.value -= 5;
                     wallet.update();
                     catnipLabel.visible = false;
+                    meow.play();
                     catGraphics.frame = 0;
                 }
             }, this);
@@ -405,8 +412,11 @@
                     d3.shuffle(discardPile);
                     deck = deck.concat(discardPile);
                     discardPile = [];
-                    if (catGraphics.frame < 4) {
-                        catGraphics.frame++;
+                    if (++catGraphics.frame == 4) {
+                        setTimeout(_ => {
+                            freakout.play();
+                            catGraphics.frame = 0;
+                        }, 1000);
                     }
                     decklabel.frame = 4;
                 } else {
