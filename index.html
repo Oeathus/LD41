@@ -469,6 +469,11 @@
                         gamePhase = 2;
                     }
                 } else {
+                    if (drawnCard.val.value > myMin(leftCard.val.value, rightCard.val.value) && drawnCard.val.value < myMax(leftCard.val.value, rightCard.val.value)) {
+                        catDlg.setText(skippedwonDlg[Math.floor(Math.random() * skippedwonDlg.length)]);
+                    } else {
+                        catDlg.setText(skippedlostDlg[Math.floor(Math.random() * skippedlostDlg.length)]);
+                    }
                     gamePhase = 2;
                 }
             }
