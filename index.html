@@ -393,6 +393,8 @@
                     deck = deck.concat(discardPile);
                     discardPile = [];
                     catGraphics.frame++;
+                    wallet.value -= frame;
+                    wallet.update();
                     decklabel.frame = 4;
                 } else {
                     decklabel.frame = 2;
