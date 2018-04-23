@@ -75,35 +75,20 @@
 
         let deck;
         let discardPile = [];
-        let dealersCard = new CardLink();
-        let yourCard1 = new CardLink();
-        let yourCard2 = new CardLink();
+        let leftCard = new CardLink();
+        let rightCard = new CardLink();
+        let drawnCard = new CardLink();
         let bonusCard = new CardLink();
         let wallet = new Wallet();
         let betAmount = 0;
 
-        var catnip = 0;
-        var cigs = 0;
-        var wine = 0;
-        var tuna = 0;
-
-        var catnipprice = 40;
-        var cigsprice = 10;
-        var wineprice = 5;
-        var tunaprice = 1.5;
-
-        var nicfit = 1;
-        var sober = 1;
-        var hungry = 1;
-        var bored = 1;
-
-        var catattack = 0;
+        var gamePhase = 0;
 
         function preload() {
             game.load.image('background', 'assets/images/cellmockup2.png');
             game.load.image('pcat_neutral', 'assets/images/tempcat.png');
             game.load.image('betButton', 'assets/images/betButton.png');
-            game.load.image('nextButton', 'assets/images/carddeck.png');
+            game.load.image('cardDeck', 'assets/images/carddeck.png');
             game.load.image('blankcard', 'assets/images/blankcard.png');
             game.load.image('bettext', 'assets/images/bettext84x32.png');
 
@@ -138,52 +123,42 @@
             petButton = game.add.sprite(game.world.centerX, game.world.centerY - 60, 'pcat_neutral');
             petButton.anchor.set(0.5);
             petButton.inputEnabled = true;
+            petButton.input.useHandCursor = true;
             petButton.events.onInputDown.add(() => --bored, this);
             petButton.scale.setTo(0.75, 0.75);
-
-            catnipL = game.add.bitmapText(20, 20, 'child', 'Catnip: ' + catnip.toFixed(2), 24);
-            cigsL = game.add.bitmapText(20, 40, 'child', 'Cigs: ' + cigs.toFixed(2), 24);
-            wineL = game.add.bitmapText(20, 60, 'child', 'Wine: ' + wine.toFixed(2), 24);
-            tunaL = game.add.bitmapText(20, 80, 'child', 'Tuna: ' + tuna.toFixed(2), 24);
-
-            nicfitL = game.add.bitmapText(20, 120, 'child', 'Nicfit: ' + nicfit.toFixed(2), 24);
-            soberL = game.add.bitmapText(20, 140, 'child', 'Sober: ' + sober.toFixed(2), 24);
-            hungryL = game.add.bitmapText(20, 160, 'child', 'Hungry: ' + hungry.toFixed(2), 24);
-            boredL = game.add.bitmapText(20, 180, 'child', 'Bored: ' + bored.toFixed(2), 24);
-
-            catattackL = game.add.bitmapText(20, 200, 'child', 'Bonus: ' + catattack.toFixed(2), 24);
 
             betButton = game.add.sprite(240, 500, 'coinstack', 0);
             betButton.anchor.set(0.5);
             betButton.inputEnabled = true;
+            betButton.input.useHandCursor = true;
             betButton.events.onInputDown.add(betButtonAction, this);
             betlabel = betButton.addChild(game.make.sprite(-35, 30, 'bettext'));
             betlabel.scale.setTo(.75);
 
-            dealersCard.elem = game.add.sprite(200, 240, 'blankcard');
-            dealersCard.elem.anchor.set(0);
-            dealersCard.elem.scale.set(.5);
-            dealersCard.tl = dealersCard.elem.addChild(game.make.sprite(10, 10, 'cvalue'));
-            dealersCard.br = dealersCard.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
-            dealersCard.c = dealersCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
+            leftCard.elem = game.add.sprite(200, 240, 'blankcard');
+            leftCard.elem.anchor.set(0);
+            leftCard.elem.scale.set(.5);
+            leftCard.elem.inputEnabled = true;
+            leftCard.tl = leftCard.elem.addChild(game.make.sprite(10, 10, 'cvalue'));
+            leftCard.br = leftCard.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
+            leftCard.c = leftCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
 
-            yourCard1.elem = game.add.sprite(520, 240, 'blankcard');
-            yourCard1.elem.anchor.set(0);
-            yourCard1.elem.scale.set(.5);
-            yourCard1.elem.inputEnabled = true;
-            yourCard1.elem.events.onInputDown.add(drawSecondCard, this);
-            yourCard1.tl = yourCard1.elem.addChild(game.make.sprite(10, 10, 'cvalue'));
-            yourCard1.br = yourCard1.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
-            yourCard1.c = yourCard1.elem.addChild(game.make.sprite(85, 140, 'csuit'));
+            rightCard.elem = game.add.sprite(520, 240, 'blankcard');
+            rightCard.elem.anchor.set(0);
+            rightCard.elem.scale.set(.5);
+            rightCard.elem.inputEnabled = true;
+            //rightCard.elem.events.onInputDown.add(drawSecondCard, this);
+            rightCard.tl = rightCard.elem.addChild(game.make.sprite(10, 10, 'cvalue'));
+            rightCard.br = rightCard.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
+            rightCard.c = rightCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
 
-            yourCard2.elem = game.add.sprite(360, 240, 'blankcard');
-            yourCard2.elem.anchor.set(0);
-            yourCard2.elem.scale.set(.5);
-            yourCard2.elem.inputEnabled = true;
-            yourCard2.elem.events.onInputDown.add(drawBonusCard, this);
-            yourCard2.tl = yourCard2.elem.addChild(game.make.sprite(10, 10, 'cvalue'));
-            yourCard2.br = yourCard2.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
-            yourCard2.c = yourCard2.elem.addChild(game.make.sprite(85, 140, 'csuit'));
+            drawnCard.elem = game.add.sprite(360, 240, 'blankcard');
+            drawnCard.elem.anchor.set(0);
+            drawnCard.elem.scale.set(.5);
+            drawnCard.elem.inputEnabled = true;
+            drawnCard.tl = drawnCard.elem.addChild(game.make.sprite(10, 10, 'cvalue'));
+            drawnCard.br = drawnCard.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
+            drawnCard.c = drawnCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
 
             bonusCard.elem = game.add.sprite(390, 270, 'blankcard');
             bonusCard.elem.anchor.set(0);
@@ -192,133 +167,20 @@
             bonusCard.br = bonusCard.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
             bonusCard.c = bonusCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
 
-            nextButton = game.add.sprite(590, 450, 'nextButton');
-            nextButton.inputEnabled = true;
-            nextButton.events.onInputDown.add(nextButtonAction, this);          
-            decklabel = nextButton.addChild(game.make.sprite(38, 55, 'decktext',2));
+            cardDeck = game.add.sprite(590, 450, 'cardDeck');
+            cardDeck.inputEnabled = true;
+            cardDeck.input.useHandCursor = true;
+            cardDeck.events.onInputDown.add(deckCommand, this);
+            decklabel = cardDeck.addChild(game.make.sprite(38, 55, 'decktext', 1));
             decklabel.scale.setTo(.5);
-
-            buyCatnipButton = game.add.bitmapText(300, 50, 'child', "Buy Catnip", 24);
-            buyCatnipButton.anchor.set(0.5);
-            buyCatnipButton.inputEnabled = true;
-            buyCatnipButton.events.onInputDown.add(buycatnip, this);
-
-            buyCigsButton = game.add.bitmapText(300, 100, 'child', "Buy Cigs", 24);
-            buyCigsButton.anchor.set(0.5);
-            buyCigsButton.inputEnabled = true;
-            buyCigsButton.events.onInputDown.add(buycigs, this);
-
-            buyWineButton = game.add.bitmapText(450, 50, 'child', "Buy Wine", 24);
-            buyWineButton.anchor.set(0.5);
-            buyWineButton.inputEnabled = true;
-            buyWineButton.events.onInputDown.add(buywine, this);
-
-            buyTunaButton = game.add.bitmapText(450, 100, 'child', "Buy Tuna", 24);
-            buyTunaButton.anchor.set(0.5);
-            buyTunaButton.inputEnabled = true;
-            buyTunaButton.events.onInputDown.add(buytuna, this);
 
             deck = getDeck();
             d3.shuffle(deck);
-            dealersCard.update(deck.pop());
-            yourCard1.update(deck.pop());
-            yourCard2.empty();
+            leftCard.update(deck.pop());
+            rightCard.update(deck.pop());
+            drawnCard.empty();
             bonusCard.empty();
             wallet.update();
-            //  Here we'll create a basic looped event.
-            //  A looped event is like a repeat event but with no limit, it will literally repeat itself forever, or until you stop it.
-
-            //  The first parameter is how long to wait before the event fires. In this case 1 second (you could pass in 1000 as the value as well.)
-            //  The next two parameters are the function to call ('updateCounter') and the context under which that will happen.
-
-            game.time.events.loop(Phaser.Timer.SECOND * 5, updateCounter, this);
-        }
-
-        function updateCounter() {
-            bored += .01;
-            sober += .01;
-            hungry += .01;
-            nicfit += .01;
-
-
-            if (catnip > 0) {
-                catnip -= .01;
-
-                bored -= .03;
-                hungry += .01;
-                sober -= .03;
-            } else {
-                catnip = 0;
-            }
-
-            if (cigs > 0) {
-                cigs -= .01
-
-                hungry -= .01;
-                nicfit -= .05;
-                sober += .01;
-            } else {
-                cigs = 0;
-            }
-
-            if (wine > 0) {
-                wine -= .01
-
-                bored -= .03;
-                nicfit += .01;
-                sober -= .03;
-            } else {
-                wine = 0;
-            }
-
-            if (tuna > 0) {
-                tuna -= .01;
-
-                hungry -= .06;
-                sober += .01;
-            } else {
-                tuna = 0;
-            }
-
-            if (nicfit < 0) {
-                nicfit = 0;
-            }
-            if (sober < 0) {
-                sober = 0;
-            }
-            if (hungry < 0) {
-                hungry = 0;
-            }
-            if (bored < 0) {
-                bored = 0;
-            }
-
-            if (nicfit > 1) {
-                nicfit = 1;
-            }
-            if (sober > 1) {
-                sober = 1;
-            }
-            if (hungry > 1) {
-                hungry = 1;
-            }
-            if (bored > 1) {
-                bored = 1;
-            }
-
-            catattack = (4 - (nicfit + sober + hungry + bored)) / 4;
-
-            catnipL.setText('Catnip: ' + (catnip * 3.5).toFixed(2));
-            cigsL.setText('Cigs: ' + (cigs * 20).toFixed(2));
-            wineL.setText('Wine: ' + (wine * 750).toFixed(2));
-            tunaL.setText('Tuna: ' + (tuna * 12).toFixed(2));
-
-            nicfitL.setText('Nicfit: ' + nicfit.toFixed(2));
-            soberL.setText('Sober: ' + sober.toFixed(2));
-            hungryL.setText('Hungry: ' + hungry.toFixed(2));
-            boredL.setText('Bored: ' + bored.toFixed(2));
-
-            catattackL.setText('Bonus: ' + catattack.toFixed(2));
         }
 
         function render() {
@@ -326,45 +188,8 @@
             lefteye.rotation = game.physics.arcade.angleToPointer(lefteye);
         }
 
-        function buycatnip() {
-            if (wallet.value > catnipprice) {
-                wallet.value -= catnipprice;
-                wallet.update();
-                catnipprice *= 1.4;
-                catnip++;
-            }
-        }
-
-        function buycigs() {
-            if (wallet.value > cigsprice) {
-                wallet.value -= cigsprice;
-                wallet.update();
-                cigsprice *= 1.05;
-                cigs++;
-            }
-        }
-
-        function buywine() {
-            if (wallet.value > wineprice) {
-                wallet.value -= wineprice;
-                wallet.update();
-                wineprice *= 1.7;
-                wine++;
-            }
-        }
-
-        function buytuna() {
-            if (wallet.value > tunaprice) {
-                wallet.value -= tunaprice;
-                wallet.update();
-                tunaprice *= 1.2;
-                tuna++;
-            }
-        }
-
         function getDeck() {
             let cards = [];
-
             for (let suit = 0; suit < 4; ++suit) {
                 for (let value = 0; value < 13; ++value) {
                     cards.push(new Card(value, suit));
@@ -372,19 +197,6 @@
             }
 
             return cards;
-        }
-
-        function checkDeckSize() {
-            if (deck.length < 4) {
-                d3.shuffle(discardPile);
-                deck = deck.concat(discardPile);
-                discardPile.empty();
-            }
-        }
-
-        function endHand() {
-            betButton.inputEnabled = false;
-            yourCard1.elem.inputEnabled = false;
         }
 
         function betButtonAction() {
@@ -400,64 +212,60 @@
             betL.setText("Bet: $" + betAmount.toFixed(2).toString());
         }
 
-        function drawSecondCard() {
-            checkDeckSize();
-            yourCard2.update(deck.pop());
-            if ((yourCard2.val.compare(dealersCard.val) == 1 && yourCard2.val.compare(yourCard1.val) == -1) ||
-                (yourCard2.val.compare(dealersCard.val) == -1 && yourCard2.val.compare(yourCard1.val) == 1)) {
-                yourCard2.elem.inputEnabled = true;
-                yourCard1.elem.inputEnabled = false;
+        function deckCommand() {
+            if (gamePhase == 0) {//FIRST DRAW
+                drawnCard.update(deck.pop());
                 betButton.inputEnabled = false;
-                nextButton.inputEnabled = false;
-            } else {
-                wallet.update(-1 * betAmount);
-                endHand();
-            }
-        }
-
-        function drawBonusCard() {
-            checkDeckSize();
-            bonusCard.update(deck.pop());
-            if ((bonusCard.val.compare(dealersCard.val) == 1 && bonusCard.val.compare(yourCard2.val) == -1) ||
-                (bonusCard.val.compare(dealersCard.val) == -1 && bonusCard.val.compare(yourCard2.val) == 1)) {
-                wallet.update(betAmount * 2);
-            } else {
-                wallet.update(betAmount);
-            }
-            yourCard2.elem.inputEnabled = false;
-            nextButton.inputEnabled = true;
-        }
-
-        function nextButtonAction() {
-            checkDeckSize();
-            if (betButton.inputEnabled) {
-                yourCard2.update(deck.pop());
-                endHand();
-            } else {
-                discardPile.push(dealersCard.val);
-                discardPile.push(yourCard1.val);
-                discardPile.push(yourCard2.val);
-                if (!(bonusCard.val === null && typeof bonusCard.val === "object")) {
-                    discardPile.push(bonusCard.val);
-                    bonusCard.empty();
-                }
-                yourCard2.empty();
-
-                if (wallet.value > 0) {
-                    if (betAmount > wallet.value) {
-                        betAmount = wallet.value;
-                        betL.setText("Bet: $" + betAmount.toFixed(2).toString());
+                if (betAmount != 0) {
+                    if (drawnCard.val.value > Math.min(leftCard.val.value, rightCard.val.value) && drawnCard.val.value < Math.max(leftCard.val.value, rightCard.val.value)) {
+                        console.log('win');
+                        wallet.value += betAmount;
+                        wallet.update();
+                        gamePhase = 1;//BONUS ROUND
+                        return;
+                    } else {
+                        wallet.value -= betAmount;
+                        wallet.update();
+                        gamePhase = 2;
+                        decklabel.frame = 2;
                     }
-                    dealersCard.update(deck.pop());
-                    yourCard1.update(deck.pop());
-
-                    betButton.inputEnabled = true;
-                    yourCard1.elem.inputEnabled = true;
-                    yourCard2.elem.inputEnabled = false;
-                } else {
-                    yourCard1.empty();
-                    dealersCard.empty();
+                } else{
+                    gamePhase = 2;
                 }
+            }
+            if (gamePhase == 1) {//BONUS ROUND
+                bonusCard.update(deck.pop());
+                if (bonusCard.val.value > Math.min(leftCard.val.value, drawnCard.val.value) && bonusCard.val.value < Math.max(leftCard.val.value, drawnCard.val.value)) {
+                    wallet.update(betAmount);
+                }
+                gamePhase = 2;
+            }
+            if (gamePhase == 2) {
+                if (deck.length < 4) {
+                    d3.shuffle(discardPile);
+                    deck = deck.concat(discardPile);
+                    discardPile = [];
+                    decklabel.frame = 4;
+                } else {
+                    decklabel.frame = 2;
+                }
+                gamePhase = 3;
+                return;
+            }
+            if (gamePhase == 3) {
+                discardPile.push(leftCard.val);
+                discardPile.push(rightCard.val);
+                discardPile.push(drawnCard.val);
+                drawnCard.empty();
+                bonusCard.empty();
+                leftCard.update(deck.pop());
+                rightCard.update(deck.pop());
+                decklabel.frame = 1;
+                gamePhase = 0;
+                betAmount = 0;
+                betButton.inputEnabled = true;
+                betButton.frame = Math.round(betAmount);
+                betL.setText("Bet: $" + betAmount.toFixed(2).toString());
             }
         }
     </script>
