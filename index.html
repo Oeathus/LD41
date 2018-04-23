@@ -466,6 +466,12 @@
                         wallet.value -= betAmount;
                         wallet.update();
                         catDlg.setText(lostbestDlg[Math.floor(Math.random() * lostbestDlg.length)]);
+                        if(drawnCard.val.value == myMin(leftCard.val.value, rightCard.val.value)){
+                            catDlg.setText(lostlowtie[Math.floor(Math.random() * lostlowtie.length)]);
+                        }
+                        if(drawnCard.val.value == myMax(leftCard.val.value, rightCard.val.value)){
+                            catDlg.setText(losthightie[Math.floor(Math.random() * losthightie.length)]);
+                        }
                         gamePhase = 2;
                     }
                 } else {
