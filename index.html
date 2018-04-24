@@ -377,6 +377,7 @@
             storeSecondPage = game.make.sprite(0, 0, 'storeSecondPage');
             storeSecondPage.anchor.set(0.5);
             storeSecondPage.visible = false;
+            storeSecondPage.inputEnabled = true;
 
             flipButton = game.make.sprite(230, 170,'flip');
             flipButton.inputEnabled = true;
@@ -525,11 +526,12 @@
             doubleright.visible = false;
             bonusCard.update(deck.pop());
                 if (bonusCard.val.value > myMin(rightCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(rightCard.val.value, drawnCard.val.value)) {
-                    wallet.update(betAmount);
-                    wallet.update(betAmount);
+                    wallet.value += 2*betAmount;
+                    wallet.update();
                     catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
                 } else {
-                    wallet.update(-betAmount);
+                    wallet.value -= 2*betAmount;
+                    wallet.update();
                 }
                 gamePhase = 2;
                 deckCommand();
