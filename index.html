@@ -257,7 +257,7 @@
             openStoreButton.events.onInputDown.add(_ => store.visible = true, this);
             openStoreButton.addChild(openStoreText);
 
-            store = game.add.sprite(game.world.centerX, game.world.centerY, "storeBackground");
+            store = game.add.sprite(game.world.centerX, game.world.centerY+15, "storeBackground");
             store.anchor.set(0.5);
             store.inputEnabled = true;
             store.input.enableDrag();
