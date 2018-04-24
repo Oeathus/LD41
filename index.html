@@ -204,11 +204,11 @@
             leftCard.elem = game.add.sprite(120, 400, 'blankcard');
             leftCard.elem.anchor.set(0);
             leftCard.elem.scale.set(.5);
-            leftCard.elem.inputEnabled = true;
+            leftCard.elem.inputEnabled = false;
             leftCard.tl = leftCard.elem.addChild(game.make.sprite(10, 10, 'cvalue'));
             leftCard.br = leftCard.elem.addChild(game.make.sprite(180, 300, 'cvalue'));
             leftCard.c = leftCard.elem.addChild(game.make.sprite(85, 140, 'csuit'));
-            leftCard.elem.events.onInputDown.add(catFreakout, this);
+            //leftCard.elem.events.onInputDown.add(catFreakout, this);
 
             rightCard.elem = game.add.sprite(440, 400, 'blankcard');
             rightCard.elem.anchor.set(0);
@@ -461,8 +461,8 @@
                 betmax = 3;
                 catGraphics.frame = 0;
 
-                discardPile.empty();
-                deck.empty();
+                discardPile = [];
+                deck = [];
                 deck = getDeck();
                 d3.shuffle(deck);
                 leftCard.update(deck.pop());
