@@ -112,7 +112,7 @@
             game.load.image('catnip', 'assets/images/catnip.png');
 
             game.load.image('spoon', 'assets/images/spoon.png');
-            
+
             game.load.image('doubledown', 'assets/images/doubledown.png');
 
             game.load.image('eyel', 'assets/images/eyel.png');
@@ -181,7 +181,7 @@
 
 
 
-            winspoon= game.add.sprite(300, 300, 'spoon');
+            winspoon = game.add.sprite(300, 300, 'spoon');
             winspoon.inputEnabled = true;
             winspoon.anchor.set(0.5);
             winspoon.scale.setTo(1);
@@ -271,7 +271,7 @@
             openStoreButton.events.onInputDown.add(_ => store.visible = true, this);
             openStoreButton.addChild(openStoreText);
 
-            store = game.add.sprite(game.world.centerX, game.world.centerY+15, "storeBackground");
+            store = game.add.sprite(game.world.centerX, game.world.centerY + 15, "storeBackground");
             store.anchor.set(0.5);
             store.inputEnabled = true;
             store.input.enableDrag();
@@ -395,15 +395,15 @@
             storespoon.inputEnabled = true;
             storespoon.input.useHandCursor = true;
             storespoon.events.onInputDown.add(_ => {
-                if(wallet.value > 100){
-                storespoon.visible = false;
+                if (wallet.value > 100) {
+                    storespoon.visible = false;
 
-                winspoon.visible = true;
-                winspoon.events.onInputDown.add(_ => {winsign.visible = true}, this);
+                    winspoon.visible = true;
+                    winspoon.events.onInputDown.add(_ => { winsign.visible = true }, this);
                 }
             }, this);
 
-            flipButton = game.make.sprite(230, 170,'flip');
+            flipButton = game.make.sprite(230, 170, 'flip');
             flipButton.inputEnabled = true;
             flipButton.input.priorityID = 1;
             flipButton.events.onInputDown.add(_ => {
@@ -451,11 +451,11 @@
             game.camera.shake(0.05, 1000);
             endSceneCat.visible = true;
             game.add.tween(endScene).to({ alpha: 1 }, 500, "Linear", true);
-            setTimeout(_ => {
+            wallet.update(20);
+            setTimeout(function () {
                 endScene.visible = false;
                 endSceneCat.visible = false;
                 endScene.alpha = 0;
-                wallet.value = 20;
                 hightieswin = false;
                 lowtieswin = false;
                 betmax = 3;
@@ -469,7 +469,6 @@
                 rightCard.update(deck.pop());
                 drawnCard.empty();
                 bonusCard.empty();
-                wallet.update();
             }, 1000);
         }
 
@@ -575,33 +574,33 @@
             doubleleft.visible = false;
             doubleright.visible = false;
             bonusCard.update(deck.pop());
-                if (bonusCard.val.value > myMin(leftCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(leftCard.val.value, drawnCard.val.value)) {
-                    wallet.value += 2*betAmount;
-                    wallet.update();
-                    catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
-                } else {
-                    wallet.value -= 2*betAmount;
-                    wallet.update();
-                    catDlg.setText('oh the hubris');
-                }
-                gamePhase = 2;
-                deckCommand();
+            if (bonusCard.val.value > myMin(leftCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(leftCard.val.value, drawnCard.val.value)) {
+                wallet.value += 2 * betAmount;
+                wallet.update();
+                catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
+            } else {
+                wallet.value -= 2 * betAmount;
+                wallet.update();
+                catDlg.setText('oh the hubris');
+            }
+            gamePhase = 2;
+            deckCommand();
         }
 
         function rightDoubleDown() {
             doubleleft.visible = false;
             doubleright.visible = false;
             bonusCard.update(deck.pop());
-                if (bonusCard.val.value > myMin(rightCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(rightCard.val.value, drawnCard.val.value)) {
-                    wallet.value += 2*betAmount;
-                    wallet.update();
-                    catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
-                } else {
-                    wallet.value -= 2*betAmount;
-                    wallet.update();
-                }
-                gamePhase = 2;
-                deckCommand();
+            if (bonusCard.val.value > myMin(rightCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(rightCard.val.value, drawnCard.val.value)) {
+                wallet.value += 2 * betAmount;
+                wallet.update();
+                catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
+            } else {
+                wallet.value -= 2 * betAmount;
+                wallet.update();
+            }
+            gamePhase = 2;
+            deckCommand();
         }
 
         function deckCommand() {
