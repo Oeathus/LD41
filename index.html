@@ -126,6 +126,8 @@
             game.load.image('flip', 'assets/images/flip.png');
             game.load.image('storeOpenButton', 'assets/images/catalogtag.png');
 
+            game.load.image('youwin', 'assets/images/youwin.png');
+
             game.load.image('endSceneBackground', 'assets/images/endSceneBackground.png');
             game.load.image('endSceneCat', 'assets/images/pcat_monstrous.png');
 
@@ -397,7 +399,7 @@
                 storespoon.visible = false;
 
                 winspoon.visible = true;
-                winspoon.events.onInputDown.add(_ => {alert("you win")}, this);
+                winspoon.events.onInputDown.add(_ => {winsign.visible = true}, this);
                 }
             }, this);
 
@@ -421,6 +423,7 @@
             store.addChild(flipButton);
             store.addChild(storeCloseButton);
 
+
             endScene = game.add.sprite(0, 0, 'endSceneBackground');
             endSceneCat = game.make.sprite(400, 300, 'endSceneCat');
             endSceneCat.anchor.set(0.5);
@@ -429,6 +432,10 @@
             endScene.visible = false;
             endSceneCat.visible = false;
             endScene.alpha = 0;
+
+            winsign = game.add.sprite(120, 120, 'youwin');
+            winsign.scale.setTo(1.5);
+            winsign.visible = false;
 
             deck = getDeck();
             d3.shuffle(deck);
