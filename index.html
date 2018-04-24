@@ -508,12 +508,12 @@
             doubleright.visible = false;
             bonusCard.update(deck.pop());
                 if (bonusCard.val.value > myMin(leftCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(leftCard.val.value, drawnCard.val.value)) {
-                    wallet.update(betAmount);
-                    wallet.update(betAmount);
+                    wallet.value += 2*betAmount;
+                    wallet.update();
                     catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
                 } else {
-                    wallet.update(-betAmount);
-                    wallet.update(-betAmount);
+                    wallet.value -= 2*betAmount;
+                    wallet.update();
                     catDlg.setText('oh the hubris');
                 }
                 gamePhase = 2;
