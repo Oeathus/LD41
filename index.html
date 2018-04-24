@@ -120,7 +120,9 @@
 
             game.load.image('storeBackground', 'assets/images/catalog.png');
             game.load.image('storeForeground', 'assets/images/catalogalpha.png');
+            game.load.image('storeSecondPage', 'assets/images/catalog2.png');
             game.load.image('storeCloseButton', 'assets/images/closebutton.png');
+            game.load.image('flip', 'assets/images/flip.png');
             game.load.image('storeOpenButton', 'assets/images/catalogtag.png');
 
             game.load.bitmapFont('child', 'assets/images/ashcan.png', 'assets/images/ashcan.fnt');
@@ -267,6 +269,8 @@
             storeCloseButton.input.priorityID = 1;
             storeCloseButton.events.onInputDown.add(_ => store.visible = false, this);
 
+
+
             tunaButton = game.make.sprite(-270, -180, 'tuna', 0);
             tunaButton.anchor.set(0.5);
             tunaButton.scale.setTo(.4);
@@ -370,16 +374,29 @@
             storeForeground = game.make.sprite(0, 0, 'storeForeground');
             storeForeground.anchor.set(0.5);
 
+            storeSecondPage = game.make.sprite(0, 0, 'storeSecondPage');
+            storeSecondPage.anchor.set(0.5);
+            storeSecondPage.visible = false;
+
+            flipButton = game.make.sprite(230, 170,'flip');
+            flipButton.inputEnabled = true;
+            flipButton.input.priorityID = 1;
+            flipButton.events.onInputDown.add(_ => {
+                storeSecondPage.visible = !storeSecondPage.visible;
+            }, this);
+
             store.addChild(cigsButton);
             store.addChild(tunaButton);
             store.addChild(prunoButton);
             store.addChild(catnipButton);
             store.addChild(storeForeground);
-            store.addChild(storeCloseButton);
             store.addChild(tunalabel);
             store.addChild(cigslabel);
             store.addChild(prunoLabel);
             store.addChild(catnipLabel);
+            store.addChild(storeSecondPage);
+            store.addChild(flipButton);
+            store.addChild(storeCloseButton);
 
             deck = getDeck();
             d3.shuffle(deck);
