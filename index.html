@@ -544,19 +544,6 @@
             doubleleft.visible = false;
             doubleright.visible = false;
             bonusCard.update(deck.pop());
-<<<<<<< HEAD
-            if (bonusCard.val.value > myMin(leftCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(leftCard.val.value, drawnCard.val.value)) {
-                wallet.update(betAmount);
-                wallet.update(betAmount);
-                catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
-            } else {
-                wallet.update(-betAmount);
-                wallet.update(-betAmount);
-                catDlg.setText('oh the hubris');
-            }
-            gamePhase = 2;
-            deckCommand();
-=======
                 if (bonusCard.val.value > myMin(leftCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(leftCard.val.value, drawnCard.val.value)) {
                     wallet.value += 2*betAmount;
                     wallet.update();
@@ -568,24 +555,12 @@
                 }
                 gamePhase = 2;
                 deckCommand();
->>>>>>> 96da18924af620b1094044a6edcd316fc32b7240
         }
 
         function rightDoubleDown() {
             doubleleft.visible = false;
             doubleright.visible = false;
             bonusCard.update(deck.pop());
-<<<<<<< HEAD
-            if (bonusCard.val.value > myMin(rightCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(rightCard.val.value, drawnCard.val.value)) {
-                wallet.update(betAmount);
-                wallet.update(betAmount);
-                catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
-            } else {
-                wallet.update(-betAmount);
-            }
-            gamePhase = 2;
-            deckCommand();
-=======
                 if (bonusCard.val.value > myMin(rightCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(rightCard.val.value, drawnCard.val.value)) {
                     wallet.value += 2*betAmount;
                     wallet.update();
@@ -596,7 +571,6 @@
                 }
                 gamePhase = 2;
                 deckCommand();
->>>>>>> 96da18924af620b1094044a6edcd316fc32b7240
         }
 
         function deckCommand() {
