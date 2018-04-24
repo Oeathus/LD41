@@ -92,7 +92,7 @@
         var startgameDlg = ["think you'll draw between the two cards?", "aces high, dueces low, its simple", "ties go to me, unless you got something i'd like", "high and low, thread the needle", "bet something or nothing, lets draw", "you think the third will be between these two", "aces are high, twos are twos, the money is in between", "i got a gambling addiction, but i also got connections", "you take care of me? i'll take care of you"];
         var shuffleDlg = ["shuffling hurts my paws, you see", "you think i will shuffle all day?", "52 cards and you want more?", "play faster if you want me to play nice"];
         var skippedwonDlg = ["you should've taken the bet, you jerk", "that's what you get, you coward", "you are luckier than you thought", "see, you gotta pay to play", "i'll get bored shuffling all day, better play"];
-        var skippedlostDlg = ["you got a good eye, i'd know", "that means next is a winner", "lets get to the good hands", "almost, almost", "don't make to have to shuffle... i hate to shuffle"];
+        var skippedlostDlg = ["you got a good eye, i'd know", "that means next is a winner", "lets get to the good hands", "almost, almost", "don't make me have to shuffle... i hate to shuffle"];
         var wonbetDlg = ["alright, don't get cocky", "you make enough, and you can start spoiling me", "alright, fair is fair", "you ain't peeking at the deck are you?", "here, buy yourself a new haircut", "want higher stakes? find me a drink", "im shaking to raise the stakes"];
         var doubledownDlg = ["yeah, try your luck again!", "double down, i dare you", "fine then, double or nothing?"];
         var lostbestDlg = ["i'll be taking that", "aw, you're luck'll turn up", "you're getting cocky", "don't you ever want to get out of here", "buy an item if your having a tough time", "too many shuffles and i'll press your luck", "you gotta draw between the others"];
@@ -120,7 +120,9 @@
 
             game.load.image('storeBackground', 'assets/images/catalog.png');
             game.load.image('storeForeground', 'assets/images/catalogalpha.png');
+            game.load.image('storeSecondPage', 'assets/images/catalog2.png');
             game.load.image('storeCloseButton', 'assets/images/closebutton.png');
+            game.load.image('flip', 'assets/images/flip.png');
             game.load.image('storeOpenButton', 'assets/images/catalogtag.png');
 
             game.load.image('endSceneBackground', 'assets/images/endSceneBackground.png');
@@ -258,7 +260,7 @@
             openStoreButton.events.onInputDown.add(_ => store.visible = true, this);
             openStoreButton.addChild(openStoreText);
 
-            store = game.add.sprite(game.world.centerX, game.world.centerY, "storeBackground");
+            store = game.add.sprite(game.world.centerX, game.world.centerY+15, "storeBackground");
             store.anchor.set(0.5);
             store.inputEnabled = true;
             store.input.enableDrag();
@@ -269,6 +271,8 @@
             storeCloseButton.inputEnabled = true;
             storeCloseButton.input.priorityID = 1;
             storeCloseButton.events.onInputDown.add(_ => store.visible = false, this);
+
+
 
             tunaButton = game.make.sprite(-270, -180, 'tuna', 0);
             tunaButton.anchor.set(0.5);
@@ -369,16 +373,30 @@
             storeForeground = game.make.sprite(0, 0, 'storeForeground');
             storeForeground.anchor.set(0.5);
 
+            storeSecondPage = game.make.sprite(0, 0, 'storeSecondPage');
+            storeSecondPage.anchor.set(0.5);
+            storeSecondPage.visible = false;
+            storeSecondPage.inputEnabled = true;
+
+            flipButton = game.make.sprite(230, 170,'flip');
+            flipButton.inputEnabled = true;
+            flipButton.input.priorityID = 1;
+            flipButton.events.onInputDown.add(_ => {
+                storeSecondPage.visible = !storeSecondPage.visible;
+            }, this);
+
             store.addChild(cigsButton);
             store.addChild(tunaButton);
             store.addChild(prunoButton);
             store.addChild(catnipButton);
             store.addChild(storeForeground);
-            store.addChild(storeCloseButton);
             store.addChild(tunalabel);
             store.addChild(cigslabel);
             store.addChild(prunoLabel);
             store.addChild(catnipLabel);
+            store.addChild(storeSecondPage);
+            store.addChild(flipButton);
+            store.addChild(storeCloseButton);
 
             endScene = game.add.sprite(0, 0, 'endSceneBackground');
             endSceneCat = game.make.sprite(400, 300, 'endSceneCat');
@@ -526,6 +544,7 @@
             doubleleft.visible = false;
             doubleright.visible = false;
             bonusCard.update(deck.pop());
+<<<<<<< HEAD
             if (bonusCard.val.value > myMin(leftCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(leftCard.val.value, drawnCard.val.value)) {
                 wallet.update(betAmount);
                 wallet.update(betAmount);
@@ -537,12 +556,26 @@
             }
             gamePhase = 2;
             deckCommand();
+=======
+                if (bonusCard.val.value > myMin(leftCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(leftCard.val.value, drawnCard.val.value)) {
+                    wallet.value += 2*betAmount;
+                    wallet.update();
+                    catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
+                } else {
+                    wallet.value -= 2*betAmount;
+                    wallet.update();
+                    catDlg.setText('oh the hubris');
+                }
+                gamePhase = 2;
+                deckCommand();
+>>>>>>> 96da18924af620b1094044a6edcd316fc32b7240
         }
 
         function rightDoubleDown() {
             doubleleft.visible = false;
             doubleright.visible = false;
             bonusCard.update(deck.pop());
+<<<<<<< HEAD
             if (bonusCard.val.value > myMin(rightCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(rightCard.val.value, drawnCard.val.value)) {
                 wallet.update(betAmount);
                 wallet.update(betAmount);
@@ -552,6 +585,18 @@
             }
             gamePhase = 2;
             deckCommand();
+=======
+                if (bonusCard.val.value > myMin(rightCard.val.value, drawnCard.val.value) && bonusCard.val.value < myMax(rightCard.val.value, drawnCard.val.value)) {
+                    wallet.value += 2*betAmount;
+                    wallet.update();
+                    catDlg.setText(wonbonus[Math.floor(Math.random() * wonbonus.length)]);
+                } else {
+                    wallet.value -= 2*betAmount;
+                    wallet.update();
+                }
+                gamePhase = 2;
+                deckCommand();
+>>>>>>> 96da18924af620b1094044a6edcd316fc32b7240
         }
 
         function deckCommand() {
