@@ -395,7 +395,7 @@
             storespoon.inputEnabled = true;
             storespoon.input.useHandCursor = true;
             storespoon.events.onInputDown.add(_ => {
-                if(wallet.value > 100){
+                if(wallet.value >= 100){
                 storespoon.visible = false;
 
                 winspoon.visible = true;
