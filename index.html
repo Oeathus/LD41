@@ -111,6 +111,7 @@
             game.load.image('pruno', 'assets/images/pruno.png');
             game.load.image('catnip', 'assets/images/catnip.png');
 
+            game.load.image('spoon', 'assets/images/spoon.png');
             
             game.load.image('doubledown', 'assets/images/doubledown.png');
 
@@ -172,6 +173,14 @@
             lefteye = petButton.addChild(game.make.sprite(-300, -158, 'eyel'));
             lefteye.anchor.set(0.5);
             lefteye.scale.setTo(1, 1);
+
+
+
+            winspoon= game.add.sprite(300, 300, 'spoon');
+            winspoon.inputEnabled = true;
+            winspoon.anchor.set(0.5);
+            winspoon.scale.setTo(1);
+            winspoon.visible = false;
 
             catGraphics = petButton.addChild(game.make.sprite(0, 0, 'catimages'));
             catGraphics.anchor.set(0.5);
@@ -379,6 +388,20 @@
             storeSecondPage.visible = false;
             storeSecondPage.inputEnabled = true;
 
+            storespoon = storeSecondPage.addChild(game.make.sprite(180, -20, 'spoon'));
+            storespoon.anchor.set(0.5);
+            storespoon.scale.setTo(1);
+            storespoon.inputEnabled = true;
+            storespoon.input.useHandCursor = true;
+            storespoon.events.onInputDown.add(_ => {
+                if(wallet.value > 100){
+                storespoon.visible = false;
+
+                winspoon.visible = true;
+                winspoon.events.onInputDown.add(_ => {alert("you win")}, this);
+                }
+            }, this);
+
             flipButton = game.make.sprite(230, 170,'flip');
             flipButton.inputEnabled = true;
             flipButton.input.priorityID = 1;
@@ -414,6 +437,8 @@
             tunaItem.visible = lowtieswin;
             cigsItem.visible = hightieswin;
             prunoItem.visible = betmax == 5;
+            winspoon.x = game.input.x;
+            winspoon.y = game.input.y;
         }
 
         function getDeck() {
